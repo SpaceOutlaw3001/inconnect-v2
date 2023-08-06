@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 // import PropTypes from 'prop-types';
 
-import {View, Panel, PanelHeader, Text, Group, Cell, 
-        Avatar, Spacing, Separator,Image,
-        CardScroll, Card, HorizontalCell, HorizontalScroll} from '@vkontakte/vkui';
+import {View, Panel, PanelHeader, Text, Group,
+        Avatar, Spacing, Separator,} from '@vkontakte/vkui';
 import '../styles/ModalPage.css'
 
 import TagButtons from '../components/TagButtonsProfile';
@@ -38,6 +37,10 @@ const Profile = (props) => {
                         <Separator />
                     </Spacing>
 
+
+                    <Text style={{marginLeft: '5%'}}>
+                        Выберите свои теги:
+                    </Text>
                     <TagButtons tags = {props.tags} userTags = {props.userTags} SetUserTags={props.SetUserTags}
                                 user_id = {props.fetchedUser.id}/>
 

@@ -56,7 +56,7 @@ const EditEventPage = (props) => {
         <Panel>
             <PanelHeader before={<PanelHeaderBack onClick={() => props.setActiveStory(ROUTES.EVENT_PAGE)}
                          data-to={ROUTES.ACTIVE_EVENTS}/>}>
-                Создание события
+                Редактирование события
             </PanelHeader>
 
             <FormLayout>
