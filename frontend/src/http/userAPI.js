@@ -11,6 +11,7 @@ export const addUser = async (id) => {
 /**************************************************************
  * Получение всех пользователей
  **************************************************************/
+// TODO: не используется
 export const getUsers = async () => {
     const {data} = await host.get(`api/user`)
     return data
@@ -19,6 +20,7 @@ export const getUsers = async () => {
 /**************************************************************
  * Получение пользователя по id
  **************************************************************/
+// TODO: не используется
 export const getIdUser = async (id) => {
     const {data} = await host.get(`api/user/${id}`)
     return data
@@ -28,6 +30,7 @@ export const getIdUser = async (id) => {
 /**************************************************************
  * Обновление пользователя по id
  **************************************************************/
+// TODO: не используется
 export const putIdUser = async (id) => {
     const {data} = await host.put(`api/user/${id}`)
     return data
@@ -37,6 +40,7 @@ export const putIdUser = async (id) => {
 /**************************************************************
  * Удаление пользователя по id
  **************************************************************/
+// TODO: не используется
 export const deleteIdUser = async (id) => {
     const {data} = await host.delete(`api/user/${id}`)
     return data

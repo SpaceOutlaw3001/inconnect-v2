@@ -1,7 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 
 import {ContentCard} from '@vkontakte/vkui';
-import img_not_found from "../img/img_not_found.jpg"
 import { ROUTES } from '../routes';
 
 const EventItems = (props) => {

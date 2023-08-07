@@ -1,10 +1,6 @@
 import React, {useEffect, useState} from 'react'
-import {Panel, PanelHeader, PanelHeaderBack, Group,
-        FormLayout, FormItem, FormLayoutGroup,
-        Text, Footnote, Spacing, Button,
-        Textarea, Input, Select,
-        DatePicker,
-        HorizontalScroll, HorizontalCell
+import {Panel, PanelHeader, PanelHeaderBack, FormLayout, FormItem, Footnote, Spacing, Button,
+        Textarea, Input, HorizontalScroll
 } from '@vkontakte/vkui'
 import TagButtonsList from './TagButtonsList'
 import PictureItems from './Pictures'
@@ -25,8 +21,6 @@ const EditEventPage = (props) => {
     const startDate = `${currentYear}-${
         (currentMonth > 9) ? `${currentMonth}`:`0${currentMonth}`}-${
         (currentDay > 9) ? `${currentDay}`:`0${currentDay}`}`
-
-    const eventDate = new Date(props.event.date)
 
     const defaultDate = `${new Date(props.event.date).getFullYear()}-${
         (new Date(props.event.date).getMonth()+1 > 9) ? 
@@ -62,11 +56,11 @@ const EditEventPage = (props) => {
             <FormLayout>
                 <FormItem top="Название" status={nameFormStatus ? "default":"error"}
                           bottom={
-                            nameFormStatus ? '' : `Задайте название не больше ${nameWordLimit} слов`
+                            nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} слов`
                           }
                           onChange={(e) => {
                             const textLength = e.target.value.length
-                            if (textLength > nameWordLimit || textLength == 0) {
+                            if (textLength > nameWordLimit || textLength === 0) {
                                 setNameFormStatus(false)
                             }
                             else {
@@ -85,7 +79,7 @@ const EditEventPage = (props) => {
                               defaultValue={props.event.text}
                               onChange={(e) => {
                                     const textLength = e.target.value.length
-                                    if (textLength > textWordLimit || textLength == 0) {
+                                    if (textLength > textWordLimit || textLength === 0) {
                                         setTextFormStatus(false)
                                     }
                                     else {
@@ -94,7 +88,7 @@ const EditEventPage = (props) => {
                               }}/>
                     <div style={{color:"#ff5c5c"}}>
                         <Spacing size={10}/>
-                        <Footnote>{textFormStatus ? "":`Задайте текст не больше ${textWordLimit} слов`}</Footnote>
+                        <Footnote>{textFormStatus ? "":`Задайте текст не более ${textWordLimit} слов`}</Footnote>
                     </div>
                 </FormItem>
 

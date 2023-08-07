@@ -3,6 +3,7 @@ import host from "./index";
 /**************************************************************
  * Создание нового тега
  **************************************************************/
+// TODO: не используется
 export const addTag = async (id) => {
     const {data} = await host.post(`api/tag`, {id})
     return data
@@ -19,6 +20,7 @@ export const getTags = async () => {
 /**************************************************************
  * Получение тега по id
  **************************************************************/
+// TODO: не используется
 export const getIdTag = async (id) => {
     const {data} = await host.get(`api/tag/${id}`)
     return data
@@ -28,6 +30,7 @@ export const getIdTag = async (id) => {
 /**************************************************************
  * Обновление данных тега по id
  **************************************************************/
+// TODO: не используется
 export const putIdTag = async (id) => {
     const {data} = await host.put(`api/tag/${id}`)
     return data
@@ -37,6 +40,7 @@ export const putIdTag = async (id) => {
 /**************************************************************
  * Удаление тега по id
  **************************************************************/
+// TODO: не используется
 export const deleteIdTag = async (id) => {
     const {data} = await host.delete(`api/tag/${id}`)
     return data

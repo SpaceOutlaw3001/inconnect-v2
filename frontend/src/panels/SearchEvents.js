@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-// import PropTypes from 'prop-types';
 import AlbumItems from '../components/AlbumItems';
 
 import {View, Panel, PanelHeader, Group, Button,

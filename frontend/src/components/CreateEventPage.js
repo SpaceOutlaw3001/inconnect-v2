@@ -1,14 +1,20 @@
-import React, {useEffect, useState} from 'react'
-import {Panel, PanelHeader, PanelHeaderBack, Group,
-        FormLayout, FormItem, FormLayoutGroup,
-        Text, Footnote, Spacing, Button,
-        Textarea, Input, Select,
-        DatePicker, 
-        HorizontalCell, HorizontalScroll
+import React, {useState} from 'react'
+import {
+    Button,
+    Footnote,
+    FormItem,
+    FormLayout,
+    HorizontalScroll,
+    Input,
+    Panel,
+    PanelHeader,
+    PanelHeaderBack,
+    Spacing,
+    Textarea
 } from '@vkontakte/vkui'
 import TagButtonsList from './TagButtonsList'
 import PictureItems from './Pictures'
-import { ROUTES } from '../routes'
+import {ROUTES} from '../routes'
 import {addEvent} from "../http/eventAPI"
 import {addUserToEvent} from "../http/user_to_eventAPI"
 import {addEventToTag} from "../http/event_to_tagAPI"
@@ -54,11 +60,11 @@ const CreateEventPage = (props) => {
             <FormLayout>
                 <FormItem top="Название" status={nameFormStatus ? "default":"error"}
                           bottom={
-                            nameFormStatus ? '' : `Задайте название не больше ${nameWordLimit} слов`
+                            nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} слов`
                           }
                           onChange={(e) => {
                             const textLength = e.target.value.length
-                            if (textLength > nameWordLimit || textLength == 0) {
+                            if (textLength > nameWordLimit || textLength === 0) {
                                 setNameFormStatus(false)
                             }
                             else {
@@ -73,7 +79,7 @@ const CreateEventPage = (props) => {
                     <Textarea id="event_text" type="text" rows={2} status={textFormStatus ? "default":"error"}
                                 onChange={(e) => {
                                     const textLength = e.target.value.length
-                                    if (textLength > textWordLimit || textLength == 0) {
+                                    if (textLength > textWordLimit || textLength === 0) {
                                         setTextFormStatus(false)
                                     }
                                     else {
@@ -88,11 +94,11 @@ const CreateEventPage = (props) => {
 
                 <FormItem top="Место" status={placeFormStatus ? "default":"error"}
                           bottom={
-                            placeFormStatus ? '' : `Задайте текст не больше ${textWordLimit} слов`
+                            placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} слов`
                           }
                           onChange={(e) => {
                             const textLength = e.target.value.length
-                            if (textLength > textWordLimit || textLength == 0) {
+                            if (textLength > textWordLimit || textLength === 0) {
                                 setPlaceFormStatus(false)
                             }
                             else {
@@ -164,13 +170,11 @@ const CreateEventPage = (props) => {
                         const date = document.getElementById("event_date").value
                         const time = document.getElementById("event_time").value
                         const chat_link = document.getElementById("chat_link").value
-                        const pic_id = selectedPic
+                        const event = await addEvent(name, text, place, date,
+                        time, chat_link, selectedPic)
 
-                        const event = await addEvent(name, text, place, date, 
-                        time, chat_link, pic_id)
                         await addUserToEvent(props.fetchedUser.id, event.id, true)
-                        selectedTagIds.forEach(async (tag_id) => {
-                        await addEventToTag(event.id, tag_id)})
+                        await Promise.all(selectedTagIds.map((tag_id) => addEventToTag(event.id, tag_id)));
 
                         props.setActiveStory(ROUTES.ACTIVE_EVENTS)
                         } }

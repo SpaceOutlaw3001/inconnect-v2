@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-// import PropTypes from 'prop-types';
-
 import {View, Panel, PanelHeader, CardGrid, Group} from '@vkontakte/vkui';
 import AlbumItems from '../components/AlbumItems';
 import { ROUTES } from '../routes';

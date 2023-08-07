@@ -12,6 +12,7 @@ export const addUserToEvent = async (uid, eid, can_modify) => {
 /**************************************************************
  * Получение всех связей
  **************************************************************/
+// TODO: не используется
 export const getUserToEvents = async () => {
     const {data} = await host.get(`api/userEvent`)
     return data
@@ -20,6 +21,7 @@ export const getUserToEvents = async () => {
 /**************************************************************
  * Получение всех связей пользователя по user_id
  **************************************************************/
+// TODO: не используется
 export const getEventToIdUser = async (user_id) => {
     const {data} = await host.get(`api/userEvent/userId/${user_id}`)
     return data
@@ -50,6 +52,7 @@ export const getIdUserToIdEvent = async (uid, eid) => {
 /**************************************************************
  * Получение списка активных событий по user_id (пользователя)
  **************************************************************/
+// TODO: не используется
 export const getEventsByUserId = async (user_id) => {
     const {data} = await host.get(`api/userEvent/eventByUser/${user_id}`)
     return data
@@ -84,6 +87,6 @@ export const deleteUserToEventByEventId = async (event_id) => {
  **************************************************************/
 export const deleteUserToEventByBothIds = async (user_id, event_id) => {
     const {data} = await host.put(`api/userEvent/delByBothIds`,
-            {"user_id": user_id, "event_id": event_id})
+            {user_id, event_id})
     return data
 }

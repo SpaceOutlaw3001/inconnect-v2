@@ -19,8 +19,9 @@ export const getAllEventToTag = async () => {
 /**************************************************************
  * Получение связи по event_id (события) и tag_id (тега)
  **************************************************************/
+// TODO: не используется
 export const getEventToTagByBothIds = async (eid, tid) => {
-    const {data} = await host.get(`api/eventTag/IdId`, {"event_id": eid, "tag_id": tid})
+    const {data} = await host.get(`api/eventTag/IdId`, {params : {"event_id": eid, "tag_id": tid}})
     return data
 }
 
@@ -47,6 +48,7 @@ export const getTagsByEventId = async (eid) => {
 /**************************************************************
  * Получение всех событий по tag_id (тега)
  **************************************************************/
+// TODO: не используется
 export const getEventByTagId = async (tid) => {
     const {data} = await host.get(`api/eventTag/eventByTag/${tid}`)
     return data

@@ -1,22 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import bridge from '@vkontakte/vk-bridge';
-import {ConfigProvider, AdaptivityProvider, AppRoot, Platform, usePlatform, useAdaptivityConditionalRender,
-		ScreenSpinner, Spacing,
+import {ConfigProvider, AdaptivityProvider, AppRoot, Spacing,
 		View, SplitLayout, SplitCol,
-		CellButton, Cell, Button,
-		Group, Panel, PanelHeader, PanelHeaderClose, PanelHeaderSubmit,
-		ModalRoot, ModalPage, ModalPageHeader, Alert } 
+		Button,
+		Group, Panel, PanelHeaderClose, PanelHeaderSubmit,
+		ModalRoot, ModalPage, ModalPageHeader, Alert }
 from '@vkontakte/vkui';
-import Icon28Newsfeed from '@vkontakte/icons/dist/28/newsfeed';
 import '@vkontakte/vkui/dist/vkui.css';
 
 import { ROUTES } from './routes'
 import { NavigationBar } from './components/NavBar';
 import TagButtonsList from './components/TagButtonsList';
 
-import { getEvents, deleteEventById } from './http/eventAPI';
-import { getNotActiveEventsByUserId, 
-		getRecEventsByUserId,
+import { deleteEventById } from './http/eventAPI';
+import { getNotActiveEventsByUserId,
 		deleteUserToEventByEventId
 		 } from './http/user_to_eventAPI';
 import { addUser } from './http/userAPI';
@@ -26,8 +23,6 @@ import { getTagIdByEventId,
 		deleteEventToTagByEventId
 		 } from './http/event_to_tagAPI';
 import { getAllPictures } from './http/pictureAPI';
-import { element } from 'prop-types';
-
 
 
 const App = () => {
@@ -85,10 +80,9 @@ const App = () => {
 	const modalBack = () => {
 		changeActiveModal(modalHistory[modalHistory.length - 2]);
 	};
-	
+
 	const modal = (
 	<ModalRoot activeModal={activeModal} onClose={modalBack}>
-
 			<ModalPage
 					id={ROUTES.MODAL_PAGE_SEARCH}
 					onClose={async () => {
@@ -108,7 +102,7 @@ const App = () => {
 							setSelectedTagIds([])
 							setEvents(await getNotActiveEventsByUserId(fetchedUser?.id))
 						}} />
-						
+
 						}
 						after={<PanelHeaderSubmit onClick={async () => {
 							modalBack()
@@ -119,7 +113,7 @@ const App = () => {
 					}
 				>
 					<Group className='tagButtons'>
-						<TagButtonsList tags = {tags} 
+						<TagButtonsList tags = {tags}
 										  selectedTagIds = {selectedTagIds}
 										  setSelectedTagIds = {setSelectedTagIds}
 						/>
@@ -132,13 +126,13 @@ const App = () => {
 								// setEvents(await getEventsSearchedByTags(selectedTagIds, fetchedUser?.id))
 								const eventsList = []
 								const allEvents = await getNotActiveEventsByUserId(fetchedUser?.id)
-								await allEvents.forEach(async (event) => {
+								for (const event in allEvents) {
 									const eventTags = await getTagIdByEventId(event.id)
 									if (checkTags(selectedTagIds, eventTags)) {
 										eventsList.push(event)
 										console.log(`included ${event.name}`)
 									}
-								})
+								}
 								setEvents(eventsList)
 							}
 							else {
@@ -153,7 +147,7 @@ const App = () => {
 
 		</ModalRoot>
 	)
-	
+
 	const closePopout = () => {
 		setPopout(null);
 	  };
@@ -193,7 +187,7 @@ const App = () => {
 			const user = await bridge.send('VKWebAppGetUserInfo');
 			setUser(user);
 			setPopout(null);
-			
+
 			await addUser(user.id);
 			SetTags(await getTags());
 			setEvents(await getNotActiveEventsByUserId(user.id));
@@ -207,7 +201,7 @@ const App = () => {
 	const go = e => {
 		setActiveStory(e.currentTarget.dataset.to);
 	};
-	
+
 	return (
 	<ConfigProvider>
 		<AdaptivityProvider>
@@ -236,7 +230,7 @@ const App = () => {
 		</AdaptivityProvider>
 	</ConfigProvider>
 	);
-	
+
 }
 
 export default App;

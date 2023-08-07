@@ -1,19 +1,17 @@
 import React, {useEffect, useState} from 'react';
-// import PropTypes from 'prop-types';
 
 import {View, Panel, PanelHeader, Tabs, TabsItem,
-        Text, Group, FixedLayout, Footnote, IconButton, Button, CardGrid,
-        Separator, Div, Spacing} from '@vkontakte/vkui';
+        Group, FixedLayout, Footnote, IconButton, CardGrid,
+        Separator, Spacing} from '@vkontakte/vkui';
 import { Icon56AddCircleOutline } from '@vkontakte/icons';
 import { ROUTES } from '../routes';
 import EventItems from '../components/EventItems';
-import { getEventToIdUser, 
-        getEventSubsByUserId, 
+import { getEventSubsByUserId,
         getCreatedEventsByUserId } from '../http/user_to_eventAPI';
 
 
 const ActiveEvents = (props) => {
-  const [menuOpened, setMenuOpened] = useState(false);
+  const [menuOpened, setMenuOpened] = useState(false); // TODO: Используется?
   const [selected, setSelected] = useState('subscriptions');
 
   const [subs, setSubs] = useState([]);

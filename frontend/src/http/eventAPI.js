@@ -14,6 +14,7 @@ export const addEvent = async (name, text, place, date,
 /**************************************************************
  * Получение всех событий
  **************************************************************/
+// TODO: не используется
 export const getEvents = async () => {
     const {data} = await host.get('api/event')
     return data
@@ -22,6 +23,7 @@ export const getEvents = async () => {
 /**************************************************************
  * Получение события по id
  **************************************************************/
+// TODO: не используется
 export const getEventById = async (id) => {
     const {data} = await host.get(`api/event/id/${id}`)
     return data
@@ -34,8 +36,7 @@ export const getEventById = async (id) => {
 export const putEventById = async (id, name, text, place, date, 
                                    time, chat_link, picture_id) => {
     const {data} = await host.put(`api/event/id/${id}`,
-    {"name": name, "text": text, "place": place, "date": date,
-    "time": time, "chat_link": chat_link, "picture_id": picture_id})
+        {name, text, place, date, time, chat_link, picture_id})
     return data
 }
 

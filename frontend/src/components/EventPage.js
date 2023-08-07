@@ -124,7 +124,6 @@ const EventPage = (props) => {
                                         Вы подписались на события
                                     </Snackbar>,
                                 );
-
                             }
                         }
                     }
