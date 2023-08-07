@@ -43,11 +43,32 @@ const App = () => {
     const [events, setEvents] = useState([]); // неактивные события (панель поиска)
     const [currentEvent, setCurrentEvent] = useState(null);
     // Теги
-    const [tags, SetTags] = useState([]);
-    const [userTags, SetUserTags] = useState([]);
+    const [tags, setTags] = useState([]);
+    const [userTags, setUserTags] = useState([]);
     const [selectedTagIds, setSelectedTagIds] = useState([]);
     //
     const [pictures, setPictures] = useState([])
+
+    useEffect(async () => {
+        async function fetchData() {
+            const user = await bridge.send('VKWebAppGetUserInfo');
+            setUser(user);
+            setPopout(null);
+            await addUser(user.id);
+
+            [tags, events, userTags, pictures] = await Promise.all([
+                getTags(), getNotActiveEventsByUserId(user.id), getTagsByUserId(user.id), getAllPictures()
+            ])
+
+            setTags(tags);
+            setEvents(events);
+            setUserTags(userTags);
+            setPictures(pictures);
+        }
+
+        await fetchData();
+
+    }, []);
 
     const checkTags = (tagsIDs, eventTags) => {
         let res = true
@@ -190,26 +211,6 @@ const App = () => {
             />,
         );
     };
-    //--------
-
-    useEffect(() => {
-        async function fetchData() {
-            const user = await bridge.send('VKWebAppGetUserInfo');
-            setUser(user);
-            setPopout(null);
-
-            [_, tags, events, userTags, pictures] = await Promise.all([addUser(user.id), getTags(), getNotActiveEventsByUserId(user.id),
-                getTagsByUserId(user.id), getAllPictures()])
-
-            SetTags(tags);
-            setEvents(events);
-            SetUserTags(userTags);
-            setPictures(pictures);
-        }
-
-        fetchData();
-
-    }, []);
 
     return (
         <ConfigProvider>
@@ -224,7 +225,7 @@ const App = () => {
                                                    fetchedUser={fetchedUser} changeActiveModal={changeActiveModal}
                                                    events={events}
                                                    tags={tags} userTags={userTags}
-                                                   SetUserTags={SetUserTags}
+                                                   SetUserTags={setUserTags}
                                                    previousPage={previousPage} setPreviousPage={setPreviousPage}
                                                    currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}
                                                    openDeletion={openDeletion}
