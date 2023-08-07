@@ -8,7 +8,7 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async addUserToEvent(req,res) {
+    async addUserToEvent(req, res) {
         const {user_id, event_id, can_modify} = req.body
         const newUTE = await db.query(`insert into "user_to_event" (user_id, event_id, can_modify) 
                                         values ($1, $2, $3) 
@@ -23,28 +23,30 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getAllUserToEvent(req,res) {
+    async getAllUserToEvent(req, res) {
         const allUserToEvents = await db.query(`select * from "user_to_event"`)
         res.json(allUserToEvents.rows)
     }
+
     /**************************************************************
      * Получение всех связей пользователя по user_id
      * @param req
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getEventToIdUser(req,res) {
+    async getEventToIdUser(req, res) {
         const user_id = req.params.user_id
         const userToEvent = await db.query(`select * from "user_to_event" where user_id = $1`, [user_id])
         res.json(userToEvent.rows)
     }
+
     /**************************************************************
      * Получение событий-подписок пользователя по user_id
      * @param req
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getEventSubsByUserId(req,res) {
+    async getEventSubsByUserId(req, res) {
         const user_id = req.params.user_id
         const userToEvent = await db.query(`select e.*, p.url from event as e 
                                             inner join user_to_event as ue on e.id = ue.event_id
@@ -52,13 +54,14 @@ class userToEventController {
                                             where ue.user_id = $1 and ue.can_modify = false`, [user_id])
         res.json(userToEvent.rows)
     }
+
     /**************************************************************
      * Получение созданных пользователем событий по user_id
      * @param req
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getCreatedEventsByUserId(req,res) {
+    async getCreatedEventsByUserId(req, res) {
         const user_id = req.params.user_id
         const userToEvent = await db.query(`select e.*, p.url from event as e 
                                             inner join user_to_event as ue on e.id = ue.event_id 
@@ -74,20 +77,21 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getIdUserToIdEvent(req,res) {
+    async getIdUserToIdEvent(req, res) {
         const {user_id, event_id} = req.body
         const userToEvent = await db.query(`select * from "user_to_event" 
-                                            where user_id = $1 and event_id = $2`, 
-                                            [user_id, event_id])
+                                            where user_id = $1 and event_id = $2`,
+            [user_id, event_id])
         res.json(userToEvent.rows[0])
     }
+
     /**************************************************************
      * Получение списка активных событий по user_id (пользователя)
      * @param req
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getEventsByUserId(req,res) {
+    async getEventsByUserId(req, res) {
         const user_id = req.params.user_id
         const events = await db.query(`select e.*, p.url from event as e 
                                         inner join user_to_event as ue on e.id = ue.event_id 
@@ -102,7 +106,7 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getNotActiveEventsByUserId(req,res) {
+    async getNotActiveEventsByUserId(req, res) {
         const user_id = req.params.user_id
         const events = await db.query(`select e.*, p.url from event as e 
                                         left join (select * from user_to_event
@@ -124,7 +128,7 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async getRecEventsByUserId(req,res) {
+    async getRecEventsByUserId(req, res) {
         const user_id = req.params.user_id
         const events = await db.query(`select distinct e.*, p.url from event as e 
                                         left join (select * from user_to_event
@@ -133,8 +137,8 @@ class userToEventController {
                                         inner join event_to_tag as et on et.event_id = e.id
                                         inner join user_to_tag as ut on ut.tag_id = et.tag_id
                                         inner join picture as p on p.id = e.picture_id
-                                        where ue.event_id is null and ut.user_id = $1`, 
-                                        [user_id])
+                                        where ue.event_id is null and ut.user_id = $1`,
+            [user_id])
         res.json(events.rows)
     }
 
@@ -160,7 +164,7 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async deleteUserToEventByEventId(req,res) {
+    async deleteUserToEventByEventId(req, res) {
         const event_id = req.params.id
         const userToEvent = await db.query(`delete from "user_to_event" 
                                             where event_id = $1`, [event_id])
@@ -173,7 +177,7 @@ class userToEventController {
      * @param res
      * @returns {Promise<void>}
      **************************************************************/
-    async deleteUserToEventByBothIds(req,res) {
+    async deleteUserToEventByBothIds(req, res) {
         const {user_id, event_id} = req.body
         const userToEvent = await db.query(`delete from "user_to_event"
                                             where user_id = $1 and

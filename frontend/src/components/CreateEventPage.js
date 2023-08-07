@@ -25,11 +25,11 @@ const CreateEventPage = (props) => {
         const { name, value } = e.currentTarget;} */
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
-    const currentMonth = currentDate.getMonth()+1
+    const currentMonth = currentDate.getMonth() + 1
     const currentDay = currentDate.getDate()
     const defaultDate = `${currentYear}-${
-        (currentMonth > 9) ? `${currentMonth}`:`0${currentMonth}`}-${
-        (currentDay > 9) ? `${currentDay}`:`0${currentDay}`}`
+        (currentMonth > 9) ? `${currentMonth}` : `0${currentMonth}`}-${
+        (currentDay > 9) ? `${currentDay}` : `0${currentDay}`}`
 
     const [nameFormStatus, setNameFormStatus] = useState(false)
     const [textFormStatus, setTextFormStatus] = useState(false)
@@ -41,7 +41,7 @@ const CreateEventPage = (props) => {
     const [selectedTagIds, setSelectedTagIds] = useState([])
     const [selectedPic, setSelPic] = useState(props.pics[0].id)
     // const [borderColor, setBorderColor] = useState("#ff5c5c") //selectedTagIds ? "#969a9f":"#ff5c5c"
-    
+
     /* useEffect(async () => {
         async function fetchData() {
             setBorderColor((selectedTagIds.length > 0) ? "#969a9f":"#ff5c5c")
@@ -53,95 +53,94 @@ const CreateEventPage = (props) => {
     return (
         <Panel>
             <PanelHeader before={<PanelHeaderBack onClick={() => props.setActiveStory(ROUTES.ACTIVE_EVENTS)}
-                         data-to={ROUTES.ACTIVE_EVENTS}/>}>
+                                                  data-to={ROUTES.ACTIVE_EVENTS}/>}>
                 Создание события
             </PanelHeader>
 
             <FormLayout>
-                <FormItem top="Название" status={nameFormStatus ? "default":"error"}
+                <FormItem top="Название" status={nameFormStatus ? "default" : "error"}
                           bottom={
-                            nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} слов`
+                              nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} слов`
                           }
                           onChange={(e) => {
-                            const textLength = e.target.value.length
-                            if (textLength > nameWordLimit || textLength === 0) {
-                                setNameFormStatus(false)
-                            }
-                            else {
-                                setNameFormStatus(true)
-                            }
-                        }}
+                              const textLength = e.target.value.length
+                              if (textLength > nameWordLimit || textLength === 0) {
+                                  setNameFormStatus(false)
+                              } else {
+                                  setNameFormStatus(true)
+                              }
+                          }}
                 >
                     <Input id="event_name" type="text" placeholder="Введите название"/>
                 </FormItem>
 
                 <FormItem top="Описание">
-                    <Textarea id="event_text" type="text" rows={2} status={textFormStatus ? "default":"error"}
-                                onChange={(e) => {
-                                    const textLength = e.target.value.length
-                                    if (textLength > textWordLimit || textLength === 0) {
-                                        setTextFormStatus(false)
-                                    }
-                                    else {
-                                        setTextFormStatus(true)
-                                    }
-                                }}/>
-                    <div style={{color:"#ff5c5c"}}>
+                    <Textarea id="event_text" type="text" rows={2} status={textFormStatus ? "default" : "error"}
+                              onChange={(e) => {
+                                  const textLength = e.target.value.length
+                                  if (textLength > textWordLimit || textLength === 0) {
+                                      setTextFormStatus(false)
+                                  } else {
+                                      setTextFormStatus(true)
+                                  }
+                              }}/>
+                    <div style={{color: "#ff5c5c"}}>
                         <Spacing size={10}/>
-                        <Footnote>{textFormStatus ? "":`Задайте текст не больше ${textWordLimit} слов`}</Footnote>
+                        <Footnote>{textFormStatus ? "" : `Задайте текст не больше ${textWordLimit} слов`}</Footnote>
                     </div>
                 </FormItem>
 
-                <FormItem top="Место" status={placeFormStatus ? "default":"error"}
+                <FormItem top="Место" status={placeFormStatus ? "default" : "error"}
                           bottom={
-                            placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} слов`
+                              placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} слов`
                           }
                           onChange={(e) => {
-                            const textLength = e.target.value.length
-                            if (textLength > textWordLimit || textLength === 0) {
-                                setPlaceFormStatus(false)
-                            }
-                            else {
-                                setPlaceFormStatus(true)
-                            }
-                        }}
+                              const textLength = e.target.value.length
+                              if (textLength > textWordLimit || textLength === 0) {
+                                  setPlaceFormStatus(false)
+                              } else {
+                                  setPlaceFormStatus(true)
+                              }
+                          }}
                 >
                     <Input id="event_place" type="text" placeholder="Введите адрес"/>
                 </FormItem>
 
                 <FormItem top="Дата">
                     <Input type="date" id="event_date" name="appt"
-                            defaultValue={defaultDate}
-                            min={defaultDate}
-                            max={`${currentYear+1}-12-31`}
-                            required></Input>
+                           defaultValue={defaultDate}
+                           min={defaultDate}
+                           max={`${currentYear + 1}-12-31`}
+                           required></Input>
                 </FormItem>
-                
+
                 <FormItem top="Время">
                     <Input type="time" id="event_time" name="appt"
-                            defaultValue="10:00"
-                            required>
+                           defaultValue="10:00"
+                           required>
                     </Input>
                 </FormItem>
-                
+
                 <FormItem top="Теги" className='tagButtons'
-                          status={tagsFormStatus ? "default":"error"}
-                    >
-                    <div style={{border: 'solid', borderColor: tagsFormStatus ? "#969a9f":"#ff5c5c",
-                                borderWidth: '1px', borderRadius: '20px',
-                                paddingBottom: '5%'}}
-                                onClick={() => {
-                                    setTagsFormStatus(selectedTagIds.length > 0)
-                                  }}>
+                          status={tagsFormStatus ? "default" : "error"}
+                >
+                    <div style={{
+                        border: 'solid', borderColor: tagsFormStatus ? "#969a9f" : "#ff5c5c",
+                        borderWidth: '1px', borderRadius: '20px',
+                        paddingBottom: '5%'
+                    }}
+                         onClick={() => {
+                             setTagsFormStatus(selectedTagIds.length > 0)
+                         }}>
                         <TagButtonsList className="TagButtonsList"
                                         tags={props.tags}
-                                        selectedTagIds = {selectedTagIds}
-                                        setSelectedTagIds = {setSelectedTagIds}
-                                        />
+                                        selectedTagIds={selectedTagIds}
+                                        setSelectedTagIds={setSelectedTagIds}
+                        />
                     </div>
-                    <div style={{color:"#ff5c5c"}}>
+                    <div style={{color: "#ff5c5c"}}>
                         <Spacing size={10}/>
-                        <Footnote>{(selectedTagIds.length > 0) ? "":"Выберите теги"}</Footnote>
+                        <Footnote>{(selectedTagIds.length > 0) ? "" : "Выберите теги"}</Footnote>
                     </div>
                 </FormItem>
 
@@ -150,19 +149,19 @@ const CreateEventPage = (props) => {
                 </FormItem>
 
                 <HorizontalScroll>
-                <div style={{display: 'flex'}}>
-                    <PictureItems pics={props.pics}
-                                  selected={selectedPic}
-                                  setSelected={setSelPic}/>
-                </div>
-                    
+                    <div style={{display: 'flex'}}>
+                        <PictureItems pics={props.pics}
+                                      selected={selectedPic}
+                                      setSelected={setSelPic}/>
+                    </div>
+
                 </HorizontalScroll>
-                
+
             </FormLayout>
 
 
             <Button mode="secondary" disabled={!(nameFormStatus && placeFormStatus
-                                                && textFormStatus && tagsFormStatus)}
+                && textFormStatus && tagsFormStatus)}
                     onClick={async () => {
                         const name = document.getElementById("event_name").value
                         const text = document.getElementById("event_text").value
@@ -171,18 +170,18 @@ const CreateEventPage = (props) => {
                         const time = document.getElementById("event_time").value
                         const chat_link = document.getElementById("chat_link").value
                         const event = await addEvent(name, text, place, date,
-                        time, chat_link, selectedPic)
+                            time, chat_link, selectedPic)
 
                         await addUserToEvent(props.fetchedUser.id, event.id, true)
                         await Promise.all(selectedTagIds.map((tag_id) => addEventToTag(event.id, tag_id)));
 
                         props.setActiveStory(ROUTES.ACTIVE_EVENTS)
-                        } }
-                        >
+                    }}
+            >
                 Создать событие
             </Button>
             <Spacing size={10}/>
-            
+
         </Panel>
     )
 };

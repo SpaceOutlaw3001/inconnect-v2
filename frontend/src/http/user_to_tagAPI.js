@@ -31,7 +31,7 @@ export const getTagToIdUser = async (user_id) => {
  **************************************************************/
 // TODO: не используется
 export const getIdUserToIdTag = async (uid, eid) => {
-    const {data} = await host.post(`api/userTag/IdId`,{"user_id": uid, "tag_id": eid}) // post, get
+    const {data} = await host.post(`api/userTag/IdId`, {"user_id": uid, "tag_id": eid}) // post, get
     return data
 }
 

@@ -61,41 +61,41 @@ export const NavigationBar = (props) => {
                 )
             }
         >
-            <RecEvents id = {ROUTES.REC_EVENTS}
-                        previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-                        currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                        fetchedUser = {props.fetchedUser} setActiveStory={props.setActiveStory}
-                        tags = {props.tags}
-                        />
-            <SearchEvents id = {ROUTES.SEARCH_EVENTS}
-                            changeActiveModal={props.changeActiveModal}
-                            events = {props.events}
-                            previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-							currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                            fetchedUser = {props.fetchedUser} setActiveStory={props.setActiveStory}
-                            />
-            <ActiveEvents id = {ROUTES.ACTIVE_EVENTS}
+            <RecEvents id={ROUTES.REC_EVENTS}
+                       previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
+                       currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
+                       fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
+                       tags={props.tags}
+            />
+            <SearchEvents id={ROUTES.SEARCH_EVENTS}
+                          changeActiveModal={props.changeActiveModal}
+                          events={props.events}
                           previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
                           currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                          fetchedUser = {props.fetchedUser} setActiveStory={props.setActiveStory}
-                          />
-            <Profile id = {ROUTES.PROFILE} fetchedUser = {props.fetchedUser}
-                        tags = {props.tags} userTags = {props.userTags} SetUserTags={props.SetUserTags}/>
+                          fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
+            />
+            <ActiveEvents id={ROUTES.ACTIVE_EVENTS}
+                          previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
+                          currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
+                          fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
+            />
+            <Profile id={ROUTES.PROFILE} fetchedUser={props.fetchedUser}
+                     tags={props.tags} userTags={props.userTags} SetUserTags={props.SetUserTags}/>
 
 
             <EventPage id={ROUTES.EVENT_PAGE} event={props.currentEvent} previousPage={props.previousPage}
-                        setActiveStory={props.setActiveStory}
-                        fetchedUser = {props.fetchedUser}
-                        openDeletion={props.openDeletion}
-                        />
+                       setActiveStory={props.setActiveStory}
+                       fetchedUser={props.fetchedUser}
+                       openDeletion={props.openDeletion}
+            />
             <CreateEventPage id={ROUTES.CREATE_EVENT} setActiveStory={props.setActiveStory}
-                             tags = {props.tags} fetchedUser = {props.fetchedUser}
-                             pics = {props.pictures}/>
+                             tags={props.tags} fetchedUser={props.fetchedUser}
+                             pics={props.pictures}/>
             <EditEventPage id={ROUTES.EDIT_EVENT} setActiveStory={props.setActiveStory}
-                            event={props.currentEvent} previousPage={props.previousPage}
-                            tags = {props.tags} fetchedUser = {props.fetchedUser}
-                            pics = {props.pictures}/>
-            
+                           event={props.currentEvent} previousPage={props.previousPage}
+                           tags={props.tags} fetchedUser={props.fetchedUser}
+                           pics={props.pictures}/>
+
         </Epic>
     </SplitCol>
 }

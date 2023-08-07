@@ -1,12 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {Button,
+import {
+    Button,
+    ContentCard,
+    Group,
     Panel,
     PanelHeader,
-    ContentCard,
-    Snackbar,
     PanelHeaderBack,
     SimpleCell,
-    Group,
+    Snackbar,
     Spacing
 } from '@vkontakte/vkui';
 
@@ -16,11 +17,9 @@ import Icon28Recent_outline from '@vkontakte/icons/dist/28/recent_outline';
 import Icon28Message_outline from '@vkontakte/icons/dist/28/message_outline';
 import {Icon28CheckCircleOutline} from "@vkontakte/icons";
 
-import {addUserToEvent,
-        getIdUserToIdEvent,
-        deleteUserToEventByBothIds} from "../http/user_to_eventAPI";
+import {addUserToEvent, deleteUserToEventByBothIds, getIdUserToIdEvent} from "../http/user_to_eventAPI";
 import {getTagsByEventId} from "../http/event_to_tagAPI"
-import { ROUTES } from '../routes';
+import {ROUTES} from '../routes';
 import img_not_found from "../img/img_not_found.jpg"
 
 const TagButtons = (props) => {
@@ -48,6 +47,7 @@ const EventPage = (props) => {
             setCanModify(idUserEvent?.can_modify)
             setTags(await getTagsByEventId(props.event.id))
         }
+
         await fetchData();
     }, []);
 
@@ -59,10 +59,10 @@ const EventPage = (props) => {
             >
                 {props.event.name}
             </PanelHeader>
-            
+
             <div className="event_img">
-                    <img src={props.event.url ? props.event.url : img_not_found}
-                         style={{maxHeight:'40%', maxWidth: '100%'}}/>
+                <img src={props.event.url ? props.event.url : img_not_found}
+                     style={{maxHeight: '40%', maxWidth: '100%'}}/>
             </div>
             <ContentCard
                 header={props.event.name}
@@ -71,7 +71,7 @@ const EventPage = (props) => {
 
             <div style={{display: 'block'}}>
                 <Group>
-                    <SimpleCell subtitle={props.event.place} before={<Icon28Place_outline />}>
+                    <SimpleCell subtitle={props.event.place} before={<Icon28Place_outline/>}>
                         Место
                     </SimpleCell>
 
@@ -80,23 +80,22 @@ const EventPage = (props) => {
                         day: 'numeric',
                         year: 'numeric',
                     })}
-                                before={<Icon28Сalendar_outline />}>
+                                before={<Icon28Сalendar_outline/>}>
                         Дата
                     </SimpleCell>
 
-                    <SimpleCell subtitle={props.event.time.slice(0, -3)} before={<Icon28Recent_outline />}>
+                    <SimpleCell subtitle={props.event.time.slice(0, -3)} before={<Icon28Recent_outline/>}>
                         Время
                     </SimpleCell>
 
                     {props.event.chat_link &&
-                        <SimpleCell subtitle={props.event.chat_link} before={<Icon28Message_outline />}>
+                        <SimpleCell subtitle={props.event.chat_link} before={<Icon28Message_outline/>}>
                             Чат
                         </SimpleCell>
                     }
                     <div className='tagButtons'>
                         <TagButtons tags={tags}/>
                     </div>
-
 
 
                 </Group>
@@ -107,7 +106,7 @@ const EventPage = (props) => {
 
             {!canModify && (<div className="post__btns">
                 <Button stretched size="m" mode="secondary"
-                        onClick={async () =>  {
+                        onClick={async () => {
                             if (addText === true) {
                                 setAddText(false);
                                 await deleteUserToEventByBothIds(props.fetchedUser.id, props.event.id)
@@ -119,23 +118,23 @@ const EventPage = (props) => {
                                 setSnackbar(
                                     <Snackbar
                                         onClose={() => setSnackbar(null)}
-                                        before={<Icon28CheckCircleOutline fill="var(--vkui--color_icon_positive)" />}
+                                        before={<Icon28CheckCircleOutline fill="var(--vkui--color_icon_positive)"/>}
                                     >
                                         Вы подписались на события
                                     </Snackbar>,
                                 );
                             }
                         }
-                    }
+                        }
                 >
                     {buttonText}
                 </Button>
-            </div>) }
+            </div>)}
 
             {canModify && (
                 <Group>
                     <Button mode="secondary" stretched
-                        onClick={() => props.setActiveStory(ROUTES.EDIT_EVENT)}
+                            onClick={() => props.setActiveStory(ROUTES.EDIT_EVENT)}
                     >
                         Редактировать
                     </Button>
@@ -143,18 +142,20 @@ const EventPage = (props) => {
                     <Spacing size={4}/>
 
                     <Button mode="primary" appearance="negative" stretched
-                        onClick={() =>{props.openDeletion(props.event.id)}}
+                            onClick={() => {
+                                props.openDeletion(props.event.id)
+                            }}
                     >
                         Удалить
                     </Button>
 
                 </Group>
-                
-                
+
+
             )}
             {snackbar}
         </Panel>
     );
-    }
+}
 
 export default EventPage;

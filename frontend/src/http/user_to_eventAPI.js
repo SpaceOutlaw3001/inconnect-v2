@@ -45,7 +45,7 @@ export const getCreatedEventsByUserId = async (user_id) => {
  * Получение связи по user_id (пользователя) и event_id (события)
  **************************************************************/
 export const getIdUserToIdEvent = async (uid, eid) => {
-    const {data} = await host.post(`api/userEvent/IdId`,{"user_id": uid, "event_id": eid})
+    const {data} = await host.post(`api/userEvent/IdId`, {"user_id": uid, "event_id": eid})
     return data
 }
 
@@ -87,6 +87,6 @@ export const deleteUserToEventByEventId = async (event_id) => {
  **************************************************************/
 export const deleteUserToEventByBothIds = async (user_id, event_id) => {
     const {data} = await host.put(`api/userEvent/delByBothIds`,
-            {user_id, event_id})
+        {user_id, event_id})
     return data
 }

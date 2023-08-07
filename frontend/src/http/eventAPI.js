@@ -3,11 +3,13 @@ import host from "./index";
 /**************************************************************
  * Создание нового события
  **************************************************************/
-export const addEvent = async (name, text, place, date, 
+export const addEvent = async (name, text, place, date,
                                time, chat_link, picture_id) => {
-    const {data} = await host.post('api/event', 
-    {"name": name, "text": text, "place": place, "date": date,
-    "time": time, "chat_link": chat_link, "picture_id": picture_id})
+    const {data} = await host.post('api/event',
+        {
+            "name": name, "text": text, "place": place, "date": date,
+            "time": time, "chat_link": chat_link, "picture_id": picture_id
+        })
     return data
 }
 
@@ -33,7 +35,7 @@ export const getEventById = async (id) => {
 /**************************************************************
  * Обновление данных события по id
  **************************************************************/
-export const putEventById = async (id, name, text, place, date, 
+export const putEventById = async (id, name, text, place, date,
                                    time, chat_link, picture_id) => {
     const {data} = await host.put(`api/event/id/${id}`,
         {name, text, place, date, time, chat_link, picture_id})

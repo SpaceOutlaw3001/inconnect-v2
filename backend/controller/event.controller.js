@@ -10,10 +10,11 @@ class EventController {
      ************************************************************/
     async addEvent(req, res) {
         const {name, text, place, date, time, chat_link, picture_id} = req.body
-        const newEvent = await db.query(`insert into event 
-                                        (name, text, place, date, time, chat_link, picture_id)
-                                         values ($1, $2, $3, $4, $5, $6, $7) returning *`,
-                                         [name, text, place, date, time, chat_link, picture_id])
+        const newEvent = await db.query(`insert into event
+                                             (name, text, place, date, time, chat_link, picture_id)
+                                         values ($1, $2, $3, $4, $5, $6, $7)
+                                         returning *`,
+            [name, text, place, date, time, chat_link, picture_id])
         res.json(newEvent.rows[0])
     }
 
@@ -68,14 +69,15 @@ class EventController {
         const id = req.params.id
         const {name, text, place, date, time, chat_link, picture_id} = req.body
         const event = await db.query(`update event
-                                      set name  = $1,
-                                          text  = $2,
-                                          place = $3,
-                                          date  = $4,
-                                          time  = $5,
-                                          chat_link = $6,
+                                      set name       = $1,
+                                          text       = $2,
+                                          place      = $3,
+                                          date       = $4,
+                                          time       = $5,
+                                          chat_link  = $6,
                                           picture_id = $7
-                                      where id = $8 returning *`, [name, text, place, date, time, chat_link, picture_id, id])
+                                      where id = $8
+                                      returning *`, [name, text, place, date, time, chat_link, picture_id, id])
         res.json(event.rows[0])
     }
 

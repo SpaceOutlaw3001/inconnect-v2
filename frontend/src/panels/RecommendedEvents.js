@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {View, Panel, PanelHeader, CardGrid, Group} from '@vkontakte/vkui';
+import {CardGrid, Group, Panel, PanelHeader, View} from '@vkontakte/vkui';
 import AlbumItems from '../components/AlbumItems';
-import { ROUTES } from '../routes';
-import { getRecEventsByUserId } from '../http/user_to_eventAPI';
+import {ROUTES} from '../routes';
+import {getRecEventsByUserId} from '../http/user_to_eventAPI';
 
 
 const RecEvents = (props) => {
@@ -13,6 +13,7 @@ const RecEvents = (props) => {
             props.setPreviousPage(ROUTES.REC_EVENTS)
             setRecEvents(await getRecEventsByUserId(props.fetchedUser.id))
         }
+
         await fetchData();
     }, [props.tags]);
 
@@ -25,7 +26,7 @@ const RecEvents = (props) => {
                         <AlbumItems events={recEvent}
                                     previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
                                     currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                                    fetchedUser = {props.fetchedUser} setActiveStory={props.setActiveStory}
+                                    fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
                         />
                     </CardGrid>
                 </Group>

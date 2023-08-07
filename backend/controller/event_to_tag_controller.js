@@ -95,11 +95,11 @@ class eventToTagController {
      * @returns {Promise<void>}
      **************************************************************/
     async deleteEventToTagByBothIds(req, res) {
-        const {event_id,tag_id} = req.body
+        const {event_id, tag_id} = req.body
         const eventToTag = await db.query(`delete
                                            from "event_to_tag"
                                            where event_id = $1
-                                           and tag_id = $2`, [event_id,tag_id])
+                                           and tag_id = $2`, [event_id, tag_id])
         res.json(eventToTag.rows[0])
     }
 

@@ -21,7 +21,7 @@ export const getAllEventToTag = async () => {
  **************************************************************/
 // TODO: не используется
 export const getEventToTagByBothIds = async (eid, tid) => {
-    const {data} = await host.get(`api/eventTag/IdId`, {params : {"event_id": eid, "tag_id": tid}})
+    const {data} = await host.get(`api/eventTag/IdId`, {params: {"event_id": eid, "tag_id": tid}})
     return data
 }
 
