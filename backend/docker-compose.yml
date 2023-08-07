@@ -1,0 +1,29 @@
+version: '3.1'
+services:
+  db:
+    container_name: inconnect-postgres
+    image: postgres:alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: MYP@@SSWD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  backend:
+      container_name: inconnect-backend
+      build:
+        context: .
+      restart: always
+      ports:
+        - "80:8080"
+      environment:
+        PORT: 8080
+        DB_NAME: 'inconnect'
+        DB_USER: 'postgres'
+        DB_PASSWORD: 'MYP@@SSWD'
+        DB_HOST: 'inconnect-postgres'
+        DB_PORT: '5432'
+      depends_on:
+        - db
+
+volumes:
+  postgres_data:
