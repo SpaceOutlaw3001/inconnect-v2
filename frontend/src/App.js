@@ -54,12 +54,7 @@ const App = () => {
         if (eventTags.length < tagsIDs.length) {
             res = false
         } else {
-            for (let i = 0; i < tagsIDs.length; i++) {
-                if (!eventTags.includes(tagsIDs[i])) {
-                    res = false
-                    break
-                }
-            }
+            res = tagsIDs.find(t => !eventTags.includes(t)) === null
         }
         return res
     }
@@ -128,22 +123,28 @@ const App = () => {
                 </Group>
                 <Button stretched
                         onClick={async () => {
-                            if (selectedTagIds.length) {
+                            if (!fetchedUser) {
+                                console.log('fetched user null')
+                            } else if (selectedTagIds.length) {
                                 console.log("tags selected")
                                 // setEvents(await getEventsSearchedByTags(selectedTagIds, fetchedUser?.id))
                                 const eventsList = []
-                                const allEvents = await getNotActiveEventsByUserId(fetchedUser?.id)
+                                const allEvents = await getNotActiveEventsByUserId(fetchedUser.id)
                                 for (const event in allEvents) {
-                                    const eventTags = await getTagIdByEventId(event.id)
-                                    if (checkTags(selectedTagIds, eventTags)) {
-                                        eventsList.push(event)
-                                        console.log(`included ${event.name}`)
+                                    if(event?.id) {
+                                        const eventTags = await getTagIdByEventId(event.id)
+                                        if (checkTags(selectedTagIds, eventTags)) {
+                                            eventsList.push(event)
+                                            console.log(`included ${event.name}`)
+                                        }
+                                    } else {
+                                        console.warn(`event null ${JSON.stringify(event)}`)
                                     }
                                 }
                                 setEvents(eventsList)
                             } else {
                                 console.log("no tags selected")
-                                setEvents(await getNotActiveEventsByUserId(fetchedUser?.id))
+                                setEvents(await getNotActiveEventsByUserId(fetchedUser.id))
                             }
                         }}>
                     Подтвердить выбор
@@ -158,7 +159,6 @@ const App = () => {
         setPopout(null);
     };
     const openDeletion = (event_id) => {
-        console.log('hey!')
         setPopout(
             <Alert
                 actions={[
@@ -172,9 +172,13 @@ const App = () => {
                         autoClose: true,
                         mode: 'destructive',
                         action: async () => {
-                            await deleteEventToTagByEventId(event_id)
-                            await deleteUserToEventByEventId(event_id)
-                            await deleteEventById(event_id)
+                            await Promise.all(
+                                [
+                                    deleteEventToTagByEventId(event_id),
+                                    deleteUserToEventByEventId(event_id),
+                                    deleteEventById(event_id)
+                                ]
+                            )
                             setActiveStory(ROUTES.ACTIVE_EVENTS)
                         },
                     },
@@ -194,20 +198,18 @@ const App = () => {
             setUser(user);
             setPopout(null);
 
-            await addUser(user.id);
-            SetTags(await getTags());
-            setEvents(await getNotActiveEventsByUserId(user.id));
-            SetUserTags(await getTagsByUserId(user.id));
-            setPictures(await getAllPictures());
+            [_, tags, events, userTags, pictures] = await Promise.all([addUser(user.id), getTags(), getNotActiveEventsByUserId(user.id),
+                getTagsByUserId(user.id), getAllPictures()])
+
+            SetTags(tags);
+            setEvents(events);
+            SetUserTags(userTags);
+            setPictures(pictures);
         }
 
         fetchData();
 
     }, []);
-
-    const go = e => {
-        setActiveStory(e.currentTarget.dataset.to);
-    };
 
     return (
         <ConfigProvider>
