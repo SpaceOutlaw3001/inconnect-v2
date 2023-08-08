@@ -32,7 +32,7 @@ const Profile = ({SetUserTags, fetchedUser, tags, userTags}) => {
                         <Text style={{marginLeft: '5%'}}>
                             Выберите свои теги:
                         </Text>
-                        <TagButtons tags={tags} userTags={userTags} SetUserTags={SetUserTags}
+                        <TagButtons tags={tags} userTags={userTags} setUserTags={SetUserTags}
                                     user_id={fetchedUser.id}/>
 
                     </Group>}

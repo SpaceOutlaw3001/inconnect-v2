@@ -18,10 +18,8 @@ import {ROUTES} from '../routes'
 import {putEventById} from "../http/eventAPI"
 import {addEventToTag, deleteEventToTagByEventId, getTagIdByEventId} from "../http/event_to_tagAPI"
 
-const EditEventPage = (props) => {
+const EditEventPage = ({event, pics, setActiveStory, tags}) => {
 
-    /* const onChange = (e) => {
-        const { name, value } = e.currentTarget;} */
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
     const currentMonth = currentDate.getMonth() + 1
@@ -30,11 +28,11 @@ const EditEventPage = (props) => {
         (currentMonth > 9) ? `${currentMonth}` : `0${currentMonth}`}-${
         (currentDay > 9) ? `${currentDay}` : `0${currentDay}`}`
 
-    const defaultDate = `${new Date(props.event.date).getFullYear()}-${
-        (new Date(props.event.date).getMonth() + 1 > 9) ?
-            `${new Date(props.event.date).getMonth() + 1}` : `0${new Date(props.event.date).getMonth() + 1}`}-${
-        (new Date(props.event.date).getDate() > 9) ?
-            `${new Date(props.event.date).getDate()}` : `0${new Date(props.event.date).getDate()}`}`
+    const defaultDate = `${new Date(event.date).getFullYear()}-${
+        (new Date(event.date).getMonth() + 1 > 9) ?
+            `${new Date(event.date).getMonth() + 1}` : `0${new Date(event.date).getMonth() + 1}`}-${
+        (new Date(event.date).getDate() > 9) ?
+            `${new Date(event.date).getDate()}` : `0${new Date(event.date).getDate()}`}`
 
     const [nameFormStatus, setNameFormStatus] = useState(true)
     const [textFormStatus, setTextFormStatus] = useState(true)
@@ -44,11 +42,11 @@ const EditEventPage = (props) => {
     const textWordLimit = 100
 
     const [selectedTagIds, setSelectedTagIds] = useState([])
-    const [selectedPic, setSelPic] = useState(props.event.picture_id)
+    const [selectedPic, setSelPic] = useState(event.picture_id)
 
     useEffect(() => {
         async function fetchData() {
-            setSelectedTagIds(await getTagIdByEventId(props.event.id))
+            setSelectedTagIds(await getTagIdByEventId(event.id))
         }
 
         fetchData()
@@ -57,7 +55,7 @@ const EditEventPage = (props) => {
 
     return (
         <Panel>
-            <PanelHeader before={<PanelHeaderBack onClick={() => props.setActiveStory(ROUTES.EVENT_PAGE)}
+            <PanelHeader before={<PanelHeaderBack onClick={() => setActiveStory(ROUTES.EVENT_PAGE)}
                                                   data-to={ROUTES.ACTIVE_EVENTS}/>}>
                 Редактирование события
             </PanelHeader>
@@ -77,14 +75,14 @@ const EditEventPage = (props) => {
                           }}
                 >
                     <Input id="event_name" type="text"
-                           defaultValue={props.event.name}
+                           defaultValue={event.name}
                            placeholder="Введите название"/>
                 </FormItem>
 
                 <FormItem top="Описание">
                     <Textarea id="event_text" type="text" rows={2}
                               status={textFormStatus ? "default" : "error"}
-                              defaultValue={props.event.text}
+                              defaultValue={event.text}
                               onChange={(e) => {
                                   const textLength = e.target.value.length
                                   if (textLength > textWordLimit || textLength === 0) {
@@ -101,11 +99,11 @@ const EditEventPage = (props) => {
 
                 <FormItem top="Место" status={placeFormStatus ? "default" : "error"}
                           bottom={
-                              placeFormStatus ? '' : `Задайте текст не больше ${textWordLimit} слов`
+                              placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} слов`
                           }
                           onChange={(e) => {
                               const textLength = e.target.value.length
-                              if (textLength > textWordLimit || textLength == 0) {
+                              if (textLength > textWordLimit || textLength === 0) {
                                   setPlaceFormStatus(false)
                               } else {
                                   setPlaceFormStatus(true)
@@ -113,7 +111,7 @@ const EditEventPage = (props) => {
                           }}
                 >
                     <Input id="event_place" type="text"
-                           defaultValue={props.event.place}
+                           defaultValue={event.place}
                            placeholder="Введите адрес"/>
                 </FormItem>
 
@@ -127,7 +125,7 @@ const EditEventPage = (props) => {
 
                 <FormItem top="Время">
                     <Input type="time" id="event_time" name="appt"
-                           defaultValue={props.event.time.slice(0, -3)}
+                           defaultValue={event.time.slice(0, -3)}
                            required>
                     </Input>
                 </FormItem>
@@ -144,7 +142,7 @@ const EditEventPage = (props) => {
                              setTagsFormStatus(selectedTagIds.length > 0)
                          }}>
                         <TagButtonsList className="TagButtonsList"
-                                        tags={props.tags}
+                                        tags={tags}
                                         selectedTagIds={selectedTagIds}
                                         setSelectedTagIds={setSelectedTagIds}
                         />
@@ -157,13 +155,13 @@ const EditEventPage = (props) => {
 
                 <FormItem top="Ссылка на чат">
                     <Input id="chat_link" type="text"
-                           defaultValue={props.event.chat_link}
+                           defaultValue={event.chat_link}
                            placeholder="Вставьте ссылку"/>
                 </FormItem>
 
                 <HorizontalScroll>
                     <div style={{display: 'flex'}}>
-                        <PictureItems pics={props.pics}
+                        <PictureItems pics={pics}
                                       selected={selectedPic}
                                       setSelected={setSelPic}/>
                     </div>
@@ -181,16 +179,14 @@ const EditEventPage = (props) => {
                         const date = document.getElementById("event_date").value
                         const time = document.getElementById("event_time").value
                         const chat_link = document.getElementById("chat_link").value
-                        const pic_id = selectedPic
 
-                        await putEventById(props.event.id, name, text, place, date,
-                            time, chat_link, pic_id)
-                        await deleteEventToTagByEventId(props.event.id)
-                        selectedTagIds.forEach(async (tag_id) => {
-                            await addEventToTag(props.event.id, tag_id)
-                        })
+                        await putEventById(event.id, name, text, place, date,
+                            time, chat_link, selectedPic)
+                        await deleteEventToTagByEventId(event.id)
+                        await Promise.all(selectedTagIds.map(
+                            async (tag_id) => await addEventToTag(event.id, tag_id)))
 
-                        props.setActiveStory(ROUTES.ACTIVE_EVENTS)
+                        setActiveStory(ROUTES.ACTIVE_EVENTS)
                     }}
             >
                 Сохранить

@@ -20,9 +20,7 @@ import {addUserToEvent} from "../http/user_to_eventAPI"
 import {addEventToTag} from "../http/event_to_tagAPI"
 
 
-const CreateEventPage = (props) => {
-    /* const onChange = (e) => {
-        const { name, value } = e.currentTarget;} */
+const CreateEventPage = ({fetchedUser, pics, setActiveStory, tags}) => {
     const currentDate = new Date()
     const currentYear = currentDate.getFullYear()
     const currentMonth = currentDate.getMonth() + 1
@@ -39,7 +37,7 @@ const CreateEventPage = (props) => {
     const textWordLimit = 100
 
     const [selectedTagIds, setSelectedTagIds] = useState([])
-    const [selectedPic, setSelPic] = useState(props.pics[0].id)
+    const [selectedPic, setSelPic] = useState(pics[0].id)
     // const [borderColor, setBorderColor] = useState("#ff5c5c") //selectedTagIds ? "#969a9f":"#ff5c5c"
 
     /* useEffect(async () => {
@@ -52,7 +50,7 @@ const CreateEventPage = (props) => {
 
     return (
         <Panel>
-            <PanelHeader before={<PanelHeaderBack onClick={() => props.setActiveStory(ROUTES.ACTIVE_EVENTS)}
+            <PanelHeader before={<PanelHeaderBack onClick={() => setActiveStory(ROUTES.ACTIVE_EVENTS)}
                                                   data-to={ROUTES.ACTIVE_EVENTS}/>}>
                 Создание события
             </PanelHeader>
@@ -86,7 +84,7 @@ const CreateEventPage = (props) => {
                               }}/>
                     <div style={{color: "#ff5c5c"}}>
                         <Spacing size={10}/>
-                        <Footnote>{textFormStatus ? "" : `Задайте текст не больше ${textWordLimit} слов`}</Footnote>
+                        <Footnote>{textFormStatus ? "" : `Задайте текст не более ${textWordLimit} слов`}</Footnote>
                     </div>
                 </FormItem>
 
@@ -133,7 +131,7 @@ const CreateEventPage = (props) => {
                              setTagsFormStatus(selectedTagIds.length > 0)
                          }}>
                         <TagButtonsList className="TagButtonsList"
-                                        tags={props.tags}
+                                        tags={tags}
                                         selectedTagIds={selectedTagIds}
                                         setSelectedTagIds={setSelectedTagIds}
                         />
@@ -150,7 +148,7 @@ const CreateEventPage = (props) => {
 
                 <HorizontalScroll>
                     <div style={{display: 'flex'}}>
-                        <PictureItems pics={props.pics}
+                        <PictureItems pics={pics}
                                       selected={selectedPic}
                                       setSelected={setSelPic}/>
                     </div>
@@ -172,10 +170,10 @@ const CreateEventPage = (props) => {
                         const event = await addEvent(name, text, place, date,
                             time, chat_link, selectedPic)
 
-                        await addUserToEvent(props.fetchedUser.id, event.id, true)
+                        await addUserToEvent(fetchedUser.id, event.id, true)
                         await Promise.all(selectedTagIds.map((tag_id) => addEventToTag(event.id, tag_id)));
 
-                        props.setActiveStory(ROUTES.ACTIVE_EVENTS)
+                        setActiveStory(ROUTES.ACTIVE_EVENTS)
                     }}
             >
                 Создать событие

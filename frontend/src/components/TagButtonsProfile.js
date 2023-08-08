@@ -2,7 +2,7 @@ import React from 'react';
 import {Button} from '@vkontakte/vkui';
 import {addUserToTag, deleteUserToTagByBothIds, getTagsByUserId} from '../http/user_to_tagAPI';
 
-const TagButtons = ({SetUserTags, tags, userTags, user_id}) => {
+const TagButtons = ({setUserTags, tags, userTags, user_id}) => {
     // TODO: state?
 
     const userTagsIds = userTags.map(userTag => userTag.id)
@@ -20,11 +20,11 @@ const TagButtons = ({SetUserTags, tags, userTags, user_id}) => {
                         await deleteUserToTagByBothIds(user_id, id)
 
                         const updatedTags = await getTagsByUserId(user_id)
-                        SetUserTags(updatedTags)
+                        setUserTags(updatedTags)
                     } else {
                         await addUserToTag(user_id, id)
                         const updatedTags = await getTagsByUserId(user_id)
-                        SetUserTags(updatedTags)
+                        setUserTags(updatedTags)
                     }
                 }}
         >

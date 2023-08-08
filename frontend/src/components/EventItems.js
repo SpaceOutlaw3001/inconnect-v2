@@ -3,15 +3,9 @@ import React from 'react';
 import {ContentCard} from '@vkontakte/vkui';
 import {ROUTES} from '../routes';
 
-const EventItems = (props) => {
+const EventItems = ({events, setActiveStory, setCurrentEvent}) => {
 
-    /* useEffect(async () => {
-        async function fetchData() {}
-        await fetchData();
-    }, []); */
-
-
-    return props.events.map((event) => (
+    return events.map((event) => (
             <ContentCard
                 key={event.id}
                 caption={event.text}
@@ -19,8 +13,8 @@ const EventItems = (props) => {
 
                 maxHeight={250}
                 onClick={async () => {
-                    await props.setCurrentEvent(event)
-                    props.setActiveStory(ROUTES.EVENT_PAGE)
+                    await setCurrentEvent(event)
+                    setActiveStory(ROUTES.EVENT_PAGE)
                 }}
             />
         )

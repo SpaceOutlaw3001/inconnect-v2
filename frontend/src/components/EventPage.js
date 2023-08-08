@@ -12,7 +12,7 @@ import {
 } from '@vkontakte/vkui';
 
 import Icon28Place_outline from '@vkontakte/icons/dist/28/place_outline';
-import Icon28Сalendar_outline from '@vkontakte/icons/dist/28/calendar_outline';
+import Icon28Calendar_outline from '@vkontakte/icons/dist/28/calendar_outline';
 import Icon28Recent_outline from '@vkontakte/icons/dist/28/recent_outline';
 import Icon28Message_outline from '@vkontakte/icons/dist/28/message_outline';
 import {Icon28CheckCircleOutline} from "@vkontakte/icons";
@@ -30,7 +30,7 @@ const TagButtons = (props) => {
     ))
 }
 
-const EventPage = (props) => {
+const EventPage = ({event, fetchedUser, openDeletion, previousPage, setActiveStory}) => {
     const [addText, setAddText] = useState(false);
     const buttonText = addText ? 'Отписаться' : 'Подписаться';
     const [snackbar, setSnackbar] = useState(null);
@@ -40,12 +40,12 @@ const EventPage = (props) => {
 
     useEffect(async () => {
         async function fetchData() {
-            const idUserEvent = await getIdUserToIdEvent(props.fetchedUser.id, props.event.id)
+            const idUserEvent = await getIdUserToIdEvent(fetchedUser.id, event.id)
             if (idUserEvent) {
                 setAddText(true)//проверка на пустоту
             }
             setCanModify(idUserEvent?.can_modify)
-            setTags(await getTagsByEventId(props.event.id))
+            setTags(await getTagsByEventId(event.id))
         }
 
         await fetchData();
@@ -54,42 +54,42 @@ const EventPage = (props) => {
     return (
         <Panel>
             <PanelHeader
-                before={<PanelHeaderBack onClick={() => props.setActiveStory(props.previousPage)}
-                                         data-to={props.previousPage}/>}
+                before={<PanelHeaderBack onClick={() => setActiveStory(previousPage)}
+                                         data-to={previousPage}/>}
             >
-                {props.event.name}
+                {event.name}
             </PanelHeader>
 
             <div className="event_img">
-                <img src={props.event.url ? props.event.url : img_not_found}
+                <img src={event.url ? event.url : img_not_found}
                      style={{maxHeight: '40%', maxWidth: '100%'}}/>
             </div>
             <ContentCard
-                header={props.event.name}
-                caption={props.event.text}
+                header={event.name}
+                caption={event.text}
             />
 
             <div style={{display: 'block'}}>
                 <Group>
-                    <SimpleCell subtitle={props.event.place} before={<Icon28Place_outline/>}>
+                    <SimpleCell subtitle={event.place} before={<Icon28Place_outline/>}>
                         Место
                     </SimpleCell>
 
-                    <SimpleCell subtitle={new Date(props.event.date).toLocaleString('rus', {
+                    <SimpleCell subtitle={new Date(event.date).toLocaleString('rus', {
                         month: 'long',
                         day: 'numeric',
                         year: 'numeric',
                     })}
-                                before={<Icon28Сalendar_outline/>}>
+                                before={<Icon28Calendar_outline/>}>
                         Дата
                     </SimpleCell>
 
-                    <SimpleCell subtitle={props.event.time.slice(0, -3)} before={<Icon28Recent_outline/>}>
+                    <SimpleCell subtitle={event.time.slice(0, -3)} before={<Icon28Recent_outline/>}>
                         Время
                     </SimpleCell>
 
-                    {props.event.chat_link &&
-                        <SimpleCell subtitle={props.event.chat_link} before={<Icon28Message_outline/>}>
+                    {event.chat_link &&
+                        <SimpleCell subtitle={event.chat_link} before={<Icon28Message_outline/>}>
                             Чат
                         </SimpleCell>
                     }
@@ -109,10 +109,10 @@ const EventPage = (props) => {
                         onClick={async () => {
                             if (addText === true) {
                                 setAddText(false);
-                                await deleteUserToEventByBothIds(props.fetchedUser.id, props.event.id)
+                                await deleteUserToEventByBothIds(fetchedUser.id, event.id)
                             } else {
                                 setAddText(true);
-                                await addUserToEvent(props.fetchedUser.id, props.event.id, false);//добавляем связь
+                                await addUserToEvent(fetchedUser.id, event.id, false);//добавляем связь
 
                                 if (snackbar) return;
                                 setSnackbar(
@@ -134,7 +134,7 @@ const EventPage = (props) => {
             {canModify && (
                 <Group>
                     <Button mode="secondary" stretched
-                            onClick={() => props.setActiveStory(ROUTES.EDIT_EVENT)}
+                            onClick={() => setActiveStory(ROUTES.EDIT_EVENT)}
                     >
                         Редактировать
                     </Button>
@@ -143,7 +143,7 @@ const EventPage = (props) => {
 
                     <Button mode="primary" appearance="negative" stretched
                             onClick={() => {
-                                props.openDeletion(props.event.id)
+                                openDeletion(event.id)
                             }}
                     >
                         Удалить

@@ -1,14 +1,14 @@
 import React from 'react';
 import TagButton from './TagButton'
 
-const TagButtonsList = (props) => {
+const TagButtonsList = ({selectedTagIds, setSelectedTagIds, tags}) => {
 
-    return props.tags.map((tag) =>
+    return tags.map((tag) =>
         (
             <TagButton key={tag.id}
                        title_ru={tag.title_ru} tag_id={tag.id}
-                       setSelectedTagIds={props.setSelectedTagIds}
-                       selectedTagIds={props.selectedTagIds}
+                       setSelectedTagIds={setSelectedTagIds}
+                       selectedTagIds={selectedTagIds}
             />
         ))
 };

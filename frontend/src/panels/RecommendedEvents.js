@@ -5,28 +5,28 @@ import {ROUTES} from '../routes';
 import {getRecEventsByUserId} from '../http/user_to_eventAPI';
 
 
-const RecEvents = (props) => {
+const RecEvents = ({currentEvent, fetchedUser, previousPage, setActiveStory, setCurrentEvent, setPreviousPage, tags}) => {
     const [recEvent, setRecEvents] = useState([])
 
     useEffect(async () => {
         async function fetchData() {
-            props.setPreviousPage(ROUTES.REC_EVENTS)
-            setRecEvents(await getRecEventsByUserId(props.fetchedUser.id))
+            setPreviousPage(ROUTES.REC_EVENTS)
+            setRecEvents(await getRecEventsByUserId(fetchedUser.id))
         }
 
         await fetchData();
-    }, [props.tags]);
+    }, [tags]);
 
     return (
         <View activePanel="horizontalCell">
             <Panel id="horizontalCell">
-                <PanelHeader>Рекоммендации</PanelHeader>
+                <PanelHeader>Рекомендации</PanelHeader>
                 <Group>
                     <CardGrid size='l'>
                         <AlbumItems events={recEvent}
-                                    previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-                                    currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                                    fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
+                                    previousPage={previousPage} setPreviousPage={setPreviousPage}
+                                    currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}
+                                    fetchedUser={fetchedUser} setActiveStory={setActiveStory}
                         />
                     </CardGrid>
                 </Group>

@@ -6,11 +6,6 @@ import {ROUTES} from '../routes';
 
 const AlbumItems = ({events, setActiveStory, setCurrentEvent}) => {
 
-    /* useEffect(async () => {
-        async function fetchData() {}
-        await fetchData();
-    }, []); */
-
     return events.map((event) => (
         <ContentCard
             key={event.id}
