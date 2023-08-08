@@ -31,7 +31,23 @@ import {getTags} from './http/tagAPI';
 import {getTagsByUserId} from './http/user_to_tagAPI';
 import {deleteEventToTagByEventId, getTagIdByEventId} from './http/event_to_tagAPI';
 import {getAllPictures} from './http/pictureAPI';
+import * as Sentry from "@sentry/react";
 
+Sentry.init({
+    dsn: "https://b051f7b568bfa16c2cd26e9e077696bb@o312764.ingest.sentry.io/4505669747212288",
+    integrations: [
+        new Sentry.BrowserTracing({
+            // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
+            tracePropagationTargets: ["https://inconnect.ijo42.ru/api/"],
+        }),
+        new Sentry.Replay(),
+    ],
+    // Performance Monitoring
+    tracesSampleRate: 1.0, // Capture 100% of the transactions, reduce in production!
+    // Session Replay
+    replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
+    replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+});
 
 const App = () => {
     const [activeStory, setActiveStory] = useState(ROUTES.REC_EVENTS);
