@@ -30,11 +30,7 @@ export const getEventToTagByBothIds = async (eid, tid) => {
  **************************************************************/
 export const getTagIdByEventId = async (eid) => {
     const {data} = await host.get(`api/eventTag/tagIdByEvent/${eid}`)
-    const tagsID = []
-    data.forEach(item => {
-        tagsID.push(item.tag_id)
-    })
-    return tagsID
+    return data.map(item => (item.tag_id))
 }
 
 /**************************************************************

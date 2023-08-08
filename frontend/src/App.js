@@ -65,13 +65,8 @@ const App = () => {
     }, []);
 
     const checkTags = (tagsIDs, eventTags) => {
-        let res
-        if (eventTags.length < tagsIDs.length) {
-            res = false
-        } else {
-            res = tagsIDs.find(t => !eventTags.includes(t)) === null
-        }
-        return res
+        return tagsIDs.find(t => eventTags.includes(t)) !== undefined
+
     }
 
     //---- Modals ----
@@ -100,62 +95,50 @@ const App = () => {
 
     const modal = (
         <ModalRoot activeModal={activeModal} onClose={modalBack}>
+
             <ModalPage
+                hideCloseButton={true}
                 id={ROUTES.MODAL_PAGE_SEARCH}
                 onClose={async () => {
                     modalBack()
-                    setSelectedTagIds([])
-                    setEvents(await getNotActiveEventsByUserId(fetchedUser?.id))
                 }
                 }
                 header={
                     <ModalPageHeader
                         before={
-                            /* sizeX.compact && (
-                                <PanelHeaderClose className={sizeX.compact.className} onClick={modalBack} />
-                            ) */
                             <PanelHeaderClose onClick={async () => {
                                 modalBack()
-                                setSelectedTagIds([])
-                                setEvents(await getNotActiveEventsByUserId(fetchedUser?.id))
-                            }}/>
+                            }} />
 
                         }
-                        after={<PanelHeaderSubmit onClick={async () => {
-                            modalBack()
-                        }}/>}
                     >
                         Выбор тегов
                     </ModalPageHeader>
                 }
             >
                 <Group className='tagButtons'>
-                    <TagButtonsList tags={tags}
-                                    selectedTagIds={selectedTagIds}
-                                    setSelectedTagIds={setSelectedTagIds}
+                    <TagButtonsList tags = {tags}
+                                    selectedTagIds = {selectedTagIds}
+                                    setSelectedTagIds = {setSelectedTagIds}
                     />
                     <Spacing size={50}/>
                 </Group>
                 <Button stretched
                         onClick={async () => {
-                            if (!fetchedUser) {
-                                console.log('fetched user null')
-                            } else if (selectedTagIds.length) {
+                            if (selectedTagIds.length) {
                                 console.log("tags selected")
-                                // setEvents(await getEventsSearchedByTags(selectedTagIds, fetchedUser?.id))
                                 const eventsList = []
-                                const allEvents = await getNotActiveEventsByUserId(fetchedUser.id)
-                                for (const event in allEvents) {
-                                    if(event?.id) {
-                                        const eventTags = await getTagIdByEventId(event.id)
-                                        if (checkTags(selectedTagIds, eventTags)) {
-                                            eventsList.push(event)
-                                            console.log(`included ${event.name}`)
-                                        }
-                                    } else {
-                                        console.warn(`event null ${JSON.stringify(event)}`)
-                                    }
-                                }
+                                const allEvents = await getNotActiveEventsByUserId(fetchedUser?.id)
+                                await Promise.all(allEvents.map(async (event) => {
+                                   getTagIdByEventId(event.id).then(
+                                       eventTags => {
+                                           if (checkTags(selectedTagIds, eventTags)) {
+                                               eventsList.push(event)
+                                               console.log(`included ${event.name}`)
+                                           }
+                                       }
+                                   )
+                                }))
                                 setEvents(eventsList)
                             } else {
                                 console.log("no tags selected")
