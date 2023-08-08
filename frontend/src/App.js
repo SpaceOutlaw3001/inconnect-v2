@@ -48,30 +48,24 @@ const App = () => {
     const [selectedTagIds, setSelectedTagIds] = useState([]);
     //
     const [pictures, setPictures] = useState([])
-
-    useEffect(async () => {
-        async function fetchData() {
+    useEffect(() => {
+        const fetchData = async () => {
             const user = await bridge.send('VKWebAppGetUserInfo');
             setUser(user);
             setPopout(null);
+
             await addUser(user.id);
+            setTags(await getTags());
+            setEvents(await getNotActiveEventsByUserId(user.id));
+            setUserTags(await getTagsByUserId(user.id));
+            setPictures(await getAllPictures());
+        };
 
-            [tags, events, userTags, pictures] = await Promise.all([
-                getTags(), getNotActiveEventsByUserId(user.id), getTagsByUserId(user.id), getAllPictures()
-            ])
-
-            setTags(tags);
-            setEvents(events);
-            setUserTags(userTags);
-            setPictures(pictures);
-        }
-
-        await fetchData();
-
+        fetchData();
     }, []);
 
     const checkTags = (tagsIDs, eventTags) => {
-        let res = true
+        let res
         if (eventTags.length < tagsIDs.length) {
             res = false
         } else {
