@@ -1,20 +1,20 @@
 import React, {useEffect, useState} from 'react';
-import {CardGrid, Group, Panel, PanelHeader, View} from '@vkontakte/vkui';
+import {CardGrid, Group, Panel, PanelHeader, Text, View} from '@vkontakte/vkui';
 import AlbumItems from '../components/AlbumItems';
 import {ROUTES} from '../routes';
 import {getRecEventsByUserId} from '../http/user_to_eventAPI';
 
 
 const RecEvents = ({currentEvent, fetchedUser, previousPage, setActiveStory, setCurrentEvent, setPreviousPage, tags}) => {
-    const [recEvent, setRecEvents] = useState([])
+    const [recEvent, setRecEvents] = useState()
 
-    useEffect(async () => {
-        async function fetchData() {
+    useEffect(() => {
+        const fetchData = () => {
+            getRecEventsByUserId(fetchedUser.id).then(s => setRecEvents(s))
             setPreviousPage(ROUTES.REC_EVENTS)
-            setRecEvents(await getRecEventsByUserId(fetchedUser.id))
-        }
-
-        await fetchData();
+        };
+        if(fetchedUser?.id)
+            fetchData();
     }, [tags]);
 
     return (
@@ -23,11 +23,20 @@ const RecEvents = ({currentEvent, fetchedUser, previousPage, setActiveStory, set
                 <PanelHeader>Рекомендации</PanelHeader>
                 <Group>
                     <CardGrid size='l'>
-                        <AlbumItems events={recEvent}
-                                    previousPage={previousPage} setPreviousPage={setPreviousPage}
-                                    currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}
-                                    fetchedUser={fetchedUser} setActiveStory={setActiveStory}
-                        />
+                        {recEvent && recEvent.length !== 0 && <
+                            AlbumItems events={recEvent}
+                                       previousPage={previousPage} setPreviousPage={setPreviousPage}
+                                       currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}
+                                       fetchedUser={fetchedUser} setActiveStory={setActiveStory}
+                        />}
+                        {!recEvent &&
+                            <Text align='center' style={{paddingTop: '3%'}}>
+                                {`Рекомендации загружаются...`}
+                            </Text>}
+                        {recEvent?.length === 0 &&
+                            <Text align='center' style={{paddingTop: '3%'}}>
+                                {`Подходящих событий больше не осталось :(`}
+                            </Text>}
                     </CardGrid>
                 </Group>
             </Panel>

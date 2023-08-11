@@ -12,7 +12,8 @@ import {
     Spacing,
     Tabs,
     TabsItem,
-    View
+    View,
+    Text
 } from '@vkontakte/vkui';
 import {Icon56AddCircleOutline} from '@vkontakte/icons';
 import {ROUTES} from '../routes';
@@ -20,22 +21,23 @@ import EventItems from '../components/EventItems';
 import {getCreatedEventsByUserId, getEventSubsByUserId} from '../http/user_to_eventAPI';
 
 
-const ActiveEvents = (props) => {
+const ActiveEvents = ({currentEvent, fetchedUser, previousPage, setActiveStory, setCurrentEvent, setPreviousPage}) => {
     const [menuOpened, setMenuOpened] = useState(false); // TODO: Используется?
     const [selected, setSelected] = useState('subscriptions');
 
-    const [subs, setSubs] = useState([]);
-    const [createdEvents, setCreatedEvents] = useState([]);
+    const [subs, setSubs] = useState();
+    const [createdEvents, setCreatedEvents] = useState();
 
-    useEffect(async () => {
-        async function fetchData() {
-            setSubs(await getEventSubsByUserId(props.fetchedUser.id))
-            setCreatedEvents(await getCreatedEventsByUserId(props.fetchedUser.id))
-            props.setPreviousPage(ROUTES.ACTIVE_EVENTS)
-        }
+    useEffect(() => {
+        const fetchData = () => {
+            getEventSubsByUserId(fetchedUser.id).then(s => setSubs(s))
+            getCreatedEventsByUserId(fetchedUser.id).then(s => setCreatedEvents(s))
+            setPreviousPage(ROUTES.ACTIVE_EVENTS)
+        };
 
-        await fetchData();
-    }, []);
+        if(fetchedUser?.id)
+            fetchData();
+    }, [fetchedUser]);
 
     return (
         <View activePanel="horizontalCell">
@@ -52,32 +54,50 @@ const ActiveEvents = (props) => {
                     />
                 </FixedLayout>
 
-                {selected === 'subscriptions' && (
-
+                {selected === 'subscriptions' &&
                     <Group id="tab-content-subscriptions" aria-labelledby="tab-subscriptions" role="tabpanel">
                         <Spacing size={50}></Spacing>
 
                         <CardGrid size='l'>
-                            <EventItems events={subs}
-                                        previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-                                        currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                                        fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
-                            />
+                            {subs && subs.length !== 0 && <EventItems events={subs}
+                                                                      previousPage={previousPage} setPreviousPage={setPreviousPage}
+                                                                      currentEvent={currentEvent} setCurrentEvent={setCurrentEvent}
+                                                                      fetchedUser={fetchedUser} setActiveStory={setActiveStory}
+                            />}
+                            {!subs &&
+                                <Text align='center' style={{paddingTop: '3%'}}>
+                                    {`Ваши события загружаются...`}
+                                </Text>
+                            }
+                            {subs?.length === 0 &&
+                                <Text align='center' style={{paddingTop: '3%'}}>
+                                    {`Вы ещё не подписались на события`}
+                                </Text>}
                         </CardGrid>
 
-                    </Group>
-                )}
+                    </Group>}
 
-                {selected === 'created_events' && (
+                {selected === 'created_events' &&
                     <Group id="tab-content-created_events" aria-labelledby="tab-created_events" role="tabpanel">
                         <Spacing size={50}></Spacing>
 
                         <CardGrid size='l'>
-                            <EventItems events={createdEvents}
-                                        previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-                                        currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                                        fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
-                            />
+                            {createdEvents && createdEvents.length !== 0 && <EventItems events={createdEvents}
+                                                                                  previousPage={previousPage}
+                                                                                  setPreviousPage={setPreviousPage}
+                                                                                  currentEvent={currentEvent}
+                                                                                  setCurrentEvent={setCurrentEvent}
+                                                                                  fetchedUser={fetchedUser}
+                                                                                  setActiveStory={setActiveStory}
+                            />}
+                            {!createdEvents &&
+                                <Text align='center' style={{paddingTop: '3%'}}>
+                                    {`События загружаются...`}
+                                </Text>}
+                            {createdEvents?.length === 0 &&
+                                <Text align='center' style={{paddingTop: '3%'}}>
+                                    {`Вы ещё не создали ни одного события`}
+                                </Text>}
                         </CardGrid>
 
                         <Spacing size={90}></Spacing>
@@ -86,7 +106,7 @@ const ActiveEvents = (props) => {
                             <Spacing size={5}></Spacing>
                             <div style={{display: 'flex', justifyContent: 'center',}}>
                                 <IconButton onClick={async () => {
-                                    props.setActiveStory(ROUTES.CREATE_EVENT)
+                                    setActiveStory(ROUTES.CREATE_EVENT)
                                 }}
                                 >
                                     <Icon56AddCircleOutline/>
@@ -98,8 +118,7 @@ const ActiveEvents = (props) => {
                             }}>Создать</Footnote>
                             <Separator wide/>
                         </FixedLayout>
-                    </Group>
-                )}
+                    </Group>}
 
             </Panel>
         </View>

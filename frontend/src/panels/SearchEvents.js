@@ -1,7 +1,18 @@
 import React, {useEffect} from 'react';
 import AlbumItems from '../components/AlbumItems';
 
-import {Button, CardGrid, FixedLayout, Group, Panel, PanelHeader, Separator, Spacing, View} from '@vkontakte/vkui';
+import {
+    Button,
+    CardGrid,
+    FixedLayout,
+    Group,
+    Panel,
+    PanelHeader,
+    Separator,
+    Spacing,
+    Text,
+    View
+} from '@vkontakte/vkui';
 import {Icon28Search} from '@vkontakte/icons';
 
 import {ROUTES} from '../routes';
@@ -37,11 +48,19 @@ const SearchEvents = (props) => {
 
                     <Spacing size={15}/>
                     <CardGrid size='l'>
-                        <AlbumItems events={props.events}
-                                    previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
-                                    currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
-                                    fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
-                        />
+                        {props.events && props.events.length !== 0 && <AlbumItems events={props.events}
+                                          previousPage={props.previousPage} setPreviousPage={props.setPreviousPage}
+                                          currentEvent={props.currentEvent} setCurrentEvent={props.setCurrentEvent}
+                                          fetchedUser={props.fetchedUser} setActiveStory={props.setActiveStory}
+                        />}
+                        {!props.events &&
+                            <Text align='center' style={{paddingTop: '3%'}}>
+                                {`События загружаются...`}
+                            </Text>}
+                        {props.events?.length === 0 &&
+                            <Text align='center' style={{paddingTop: '3%'}}>
+                                {`Доступных событий больше не осталось :(`}
+                            </Text>}
                     </CardGrid>
 
                 </Group>
