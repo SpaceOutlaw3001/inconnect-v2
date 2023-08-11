@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import bridge from '@vkontakte/vk-bridge';
 import {
 	AdaptivityProvider,
@@ -12,7 +12,6 @@ import {
 	ModalRoot,
 	Panel,
 	PanelHeaderClose,
-	PanelHeaderSubmit,
 	Spacing,
 	SplitCol,
 	SplitLayout,
@@ -31,7 +30,7 @@ import {getTags} from './http/tagAPI';
 import {getTagsByUserId} from './http/user_to_tagAPI';
 import {deleteEventToTagByEventId, getTagIdByEventId} from './http/event_to_tagAPI';
 import {getAllPictures} from './http/pictureAPI';
-import * as Sentry from "@sentry/react";
+
 const App = () => {
     const [activeStory, setActiveStory] = useState(ROUTES.REC_EVENTS);
     const [previousPage, setPreviousPage] = useState(ROUTES.REC_EVENTS);
@@ -48,16 +47,21 @@ const App = () => {
     //
     const [pictures, setPictures] = useState([])
     useEffect(() => {
-        const fetchData = async () => {
-            const user = await bridge.send('VKWebAppGetUserInfo');
-            setUser(user);
-            setPopout(null);
+        const fetchData = () => {
+            getTags().then(tags => setTags(tags));
+            getAllPictures().then(pictures => setPictures(pictures));
 
-            await addUser(user.id);
-            setTags(await getTags());
-            setEvents(await getNotActiveEventsByUserId(user.id));
-            setUserTags(await getTagsByUserId(user.id));
-            setPictures(await getAllPictures());
+            bridge.send('VKWebAppGetUserInfo').then(
+                user => {
+                    setUser(user);
+                    addUser(user.id).then(
+                        () => {
+                            getNotActiveEventsByUserId(user.id).then(notActiveEvents => setEvents(notActiveEvents));
+                            getTagsByUserId(user.id).then(userTags => setUserTags(userTags));
+                        }
+                    )
+                }
+            );
         };
 
         fetchData();
@@ -127,7 +131,7 @@ const App = () => {
                             if (selectedTagIds.length) {
                                 console.log("tags selected")
                                 const eventsList = []
-                                const allEvents = await getNotActiveEventsByUserId(fetchedUser?.id)
+                                const allEvents = await getNotActiveEventsByUserId(fetchedUser.id)
                                 await Promise.all(allEvents.map(async (event) => {
                                    getTagIdByEventId(event.id).then(
                                        eventTags => {

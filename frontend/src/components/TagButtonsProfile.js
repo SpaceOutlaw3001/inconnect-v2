@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@vkontakte/vkui';
-import {addUserToTag, deleteUserToTagByBothIds, getTagsByUserId} from '../http/user_to_tagAPI';
+import {addUserToTag, deleteUserToTagByBothIds} from '../http/user_to_tagAPI';
 
 const TagButtons = ({setUserTags, tags, userTags, user_id}) => {
     // TODO: state?
@@ -19,12 +19,11 @@ const TagButtons = ({setUserTags, tags, userTags, user_id}) => {
                     if (mode === 'outline') {
                         await deleteUserToTagByBothIds(user_id, id)
 
-                        const updatedTags = await getTagsByUserId(user_id)
+                        const updatedTags = userTags.filter(tag => tag.id !== id);
                         setUserTags(updatedTags)
                     } else {
                         await addUserToTag(user_id, id)
-                        const updatedTags = await getTagsByUserId(user_id)
-                        setUserTags(updatedTags)
+                        setUserTags([...userTags, {id, mode, title_ru}])
                     }
                 }}
         >
