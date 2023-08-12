@@ -58,7 +58,7 @@ const CreateEventPage = ({fetchedUser, pics, setActiveStory, tags}) => {
             <FormLayout>
                 <FormItem top="Название" status={nameFormStatus ? "default" : "error"}
                           bottom={
-                              nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} слов`
+                              nameFormStatus ? '' : `Задайте название не более ${nameWordLimit} символов`
                           }
                           onChange={(e) => {
                               const textLength = e.target.value.length
@@ -84,13 +84,13 @@ const CreateEventPage = ({fetchedUser, pics, setActiveStory, tags}) => {
                               }}/>
                     <div style={{color: "#ff5c5c"}}>
                         <Spacing size={10}/>
-                        <Footnote>{textFormStatus ? "" : `Задайте текст не более ${textWordLimit} слов`}</Footnote>
+                        <Footnote>{textFormStatus ? "" : `Задайте текст не более ${textWordLimit} символов`}</Footnote>
                     </div>
                 </FormItem>
 
                 <FormItem top="Место" status={placeFormStatus ? "default" : "error"}
                           bottom={
-                              placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} слов`
+                              placeFormStatus ? '' : `Задайте текст не более ${textWordLimit} символов`
                           }
                           onChange={(e) => {
                               const textLength = e.target.value.length

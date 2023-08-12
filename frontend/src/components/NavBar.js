@@ -29,7 +29,7 @@ export const NavigationBar = (props) => {
                             onClick={() => props.setActiveStory(ROUTES.REC_EVENTS)}
                             selected={props.activeStory === ROUTES.REC_EVENTS}
                             data-story={ROUTES.REC_EVENTS}
-                            text="Рекоммендации"
+                            text="Рекомендации"
                         >
                             <Icon28Newsfeed/>
                         </TabbarItem>
