@@ -15,7 +15,7 @@ const RecEvents = ({currentEvent, fetchedUser, previousPage, setActiveStory, set
         };
         if(fetchedUser?.id)
             fetchData();
-    }, [tags]);
+    }, [tags, fetchedUser]);
 
     return (
         <View activePanel="horizontalCell">
