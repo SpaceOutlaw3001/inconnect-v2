@@ -38,7 +38,7 @@ const App = () => {
     const [popout, setPopout] = useState(null);//<ScreenSpinner size='large' />
 
     // События
-    const [events, setEvents] = useState([]); // неактивные события (панель поиска)
+    const [events, setEvents] = useState(); // неактивные события (панель поиска)
     const [currentEvent, setCurrentEvent] = useState(null);
     // Теги
     const [tags, setTags] = useState([]);
