@@ -1,4 +1,5 @@
 const db = require('../db')
+const {validationResult} = require("express-validator");
 
 class EventController {
 
@@ -37,10 +38,10 @@ class EventController {
      * @returns {Promise<void>}
      ************************************************************/
     async getById(req, res) {
-        const id = req.params.id
+        const {id} = req.params;
         const event = await db.query(`select *
-                                      from event
-                                      where id = $1`, [id])
+                                  from event
+                                  where id = $1`, [id])
         res.json(event.rows[0])
     }
 

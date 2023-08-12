@@ -1,28 +1,41 @@
 const Router = require('express')
 const router = new Router()
 const tagController = require('../controller/tag.controller')
+const {param, body} = require("express-validator");
+const {bodyTextChain, paramTextChain, validateMethod} = require("../validating");
 
 /**************************************************************
  * Запросы на создание
  **************************************************************/
-router.post('/tag', tagController.addTag)
+/*
+router.post('/tag', bodyTextChain(["name", "title_ru"]), body(['name', "title_ru"]).isLength({max: 50}),
+    (req,res) => validateMethod(req,res, tagController.addTag))
+*/
 
 /**************************************************************
  * Запросы на получение
  **************************************************************/
 router.get('/tag', tagController.getAllTag)
-router.get('/tag/:id', tagController.getIdTag)
-router.get('/tag/name/:name', tagController.getTagByName)
+router.get('/tag/:id', param('id').isInt(),
+    (req,res) => validateMethod(req,res, tagController.getIdTag))
+router.get('/tag/name/:name', paramTextChain('name'),
+    (req,res) => validateMethod(req,res, tagController.getTagByName))
 
 /**************************************************************
  * Запросы на обновление
  **************************************************************/
-router.put('/tag/:id', tagController.updateIdTag)
+/*
+router.put('/tag/:id', param('id').isInt(), bodyTextChain(["name", "title_ru"]),body(['name', "title_ru"]).isLength({max: 50}),
+    (req,res) => validateMethod(req,res, tagController.updateIdTag))
+*/
 
 /**************************************************************
  * Запросы на удаление
  **************************************************************/
-router.delete('/tag/:id', tagController.deleteIdTag)
+/*
+router.delete('/tag/:id', param('id').isInt(),
+    (req,res) => validateMethod(req,res, tagController.deleteIdTag))
+*/
 
 
 module.exports = router
