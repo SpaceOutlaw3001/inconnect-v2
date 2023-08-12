@@ -132,16 +132,15 @@ const App = () => {
                                 console.log("tags selected")
                                 const eventsList = []
                                 const allEvents = await getNotActiveEventsByUserId(fetchedUser.id)
-                                await Promise.all(allEvents.map(async (event) => {
-                                   getTagIdByEventId(event.id).then(
-                                       eventTags => {
-                                           if (checkTags(selectedTagIds, eventTags)) {
-                                               eventsList.push(event)
-                                               console.log(`included ${event.name}`)
-                                           }
-                                       }
-                                   )
-                                }))
+                                await Promise.all(allEvents.map(async (event) =>
+                                    getTagIdByEventId(event.id).then(
+                                        eventTags => {
+                                            if (checkTags(selectedTagIds, eventTags)) {
+                                                eventsList.push(event)
+                                                console.log(`included ${event.name}`)
+                                            }
+                                        }
+                                    )))
                                 setEvents(eventsList)
                             } else {
                                 console.log("no tags selected")
