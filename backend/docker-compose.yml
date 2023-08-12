@@ -1,29 +1,48 @@
 version: '3.1'
 services:
   db:
-    container_name: inconnect-postgres
-    image: postgres:alpine
+    container_name: in-connect-postgres
+    image: postgres:15
     restart: always
     environment:
-      POSTGRES_PASSWORD: MYP@@SSWD
+      POSTGRES_PASSWORD: "mysecretpassword"
     volumes:
       - postgres_data:/var/lib/postgresql/data
   backend:
-      container_name: inconnect-backend
-      build:
-        context: .
-      restart: always
-      ports:
-        - "80:8080"
-      environment:
-        PORT: 8080
-        DB_NAME: 'inconnect'
-        DB_USER: 'postgres'
-        DB_PASSWORD: 'MYP@@SSWD'
-        DB_HOST: 'inconnect-postgres'
-        DB_PORT: '5432'
-      depends_on:
-        - db
-
+    container_name: in-connect-backend
+    build: .
+    image: in-connect-backend
+    restart: always
+    ports:
+      - "80:8080"
+    environment:
+      PORT: 8080
+      DB_NAME: 'inconnect_v2'
+      DB_USER: 'postgres'
+      DB_PASSWORD: 'mysecretpassword'
+      DB_HOST: 'in-connect-postgres'
+      DB_PORT: '5432'
+      #DEBUG: 'express:router'
+    depends_on:
+      - db
+  pgbackups:
+    image: prodrigestivill/postgres-backup-local:alpine
+    restart: always
+    user: postgres:postgres # Optional: see below
+    volumes:
+      - /home/ubuntu/in-connect/backups:/backups
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: 'in-connect-postgres'
+      POSTGRES_DB: 'inconnect_v2'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'mysecretpassword'
+      POSTGRES_EXTRA_OPTS: '-Z6 --schema=public --blobs'
+      SCHEDULE: '@daily'
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 2
+      BACKUP_KEEP_MONTHS: 2
+      HEALTHCHECK_PORT: 8080
 volumes:
   postgres_data:
