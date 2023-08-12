@@ -1,6 +1,14 @@
 const db = require('../db')
+const {LRUCache} = require("lru-cache");
 
 class UserController {
+    cache;
+    constructor() {
+        const options = {
+            max: 50,
+        }
+        this.cache = new LRUCache(options)
+    }
 
     /**************************************************************
      * Создание нового пользователя
@@ -10,11 +18,13 @@ class UserController {
      **************************************************************/
     async addId(req, res) {
         const {id} = req.body
-        const newUser = await db.query(`insert into "user" (id)
+        if(!this.cache.has(id)) {
+            await db.query(`insert into "user" (id)
                                         values ($1)
-                                        ON CONFLICT (id) DO NOTHING
-                                        returning * `, [id])
-        res.json(newUser.rows[0])
+                                        ON CONFLICT (id) DO NOTHING`, [id])
+            this.cache.set(id, {id})
+        }
+        res.json({id})
     }
 
 

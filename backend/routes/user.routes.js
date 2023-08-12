@@ -8,14 +8,16 @@ const {validateMethod} = require("../validating");
  * Запросы на создание
  **************************************************************/
 router.post('/user', body('id').isInt(),
-    (req,res) => validateMethod(req,res, userController.addId))
+    (req,res) => validateMethod(req,res, userController.addId.bind(userController)))
 
 /**************************************************************
  * Запросы на получение
  **************************************************************/
 // router.get('/user', userController.getAllId)
+/*
 router.get('/user/:id', param('id').isInt(),
     (req,res) => validateMethod(req,res, userController.getId))
+*/
 
 /**************************************************************
  * Запросы на обновление

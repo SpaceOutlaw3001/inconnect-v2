@@ -1,6 +1,7 @@
 const db = require('../db')
 
 class tagController {
+    cache;
 
     /**************************************************************
      * Создание нового тега
@@ -23,9 +24,12 @@ class tagController {
      * @returns {Promise<void>}
      **************************************************************/
     async getAllTag(req, res) {
-        const allTags = await db.query(`select *
-                                        from "tag"`)
-        res.json(allTags.rows)
+        if(!this.cache) {
+            this.cache = (await db.query(`select *
+                                        from "tag"`)).rows
+        }
+        res.json(this.cache)
+
     }
 
     /**************************************************************

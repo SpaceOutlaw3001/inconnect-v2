@@ -1,8 +1,8 @@
 const Router = require('express')
 const router = new Router()
 const tagController = require('../controller/tag.controller')
-const {param, body} = require("express-validator");
-const {bodyTextChain, paramTextChain, validateMethod} = require("../validating");
+const {param} = require("express-validator");
+const {paramTextChain, validateMethod} = require("../validating");
 
 /**************************************************************
  * Запросы на создание
@@ -15,11 +15,13 @@ router.post('/tag', bodyTextChain(["name", "title_ru"]), body(['name', "title_ru
 /**************************************************************
  * Запросы на получение
  **************************************************************/
-router.get('/tag', tagController.getAllTag)
+router.get('/tag', tagController.getAllTag.bind(tagController))
+/*
 router.get('/tag/:id', param('id').isInt(),
     (req,res) => validateMethod(req,res, tagController.getIdTag))
 router.get('/tag/name/:name', paramTextChain('name'),
     (req,res) => validateMethod(req,res, tagController.getTagByName))
+*/
 
 /**************************************************************
  * Запросы на обновление

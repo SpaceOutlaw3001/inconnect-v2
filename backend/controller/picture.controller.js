@@ -1,6 +1,7 @@
 const db = require('../db')
 
 class pictureController {
+    cache;
 
     /**************************************************************
      * Создание новой картинки
@@ -21,8 +22,10 @@ class pictureController {
      * @returns {Promise<void>}
      **************************************************************/
     async getAllPictures(req, res) {
-        const allPics = await db.query(`select * from "picture"`)
-        res.json(allPics.rows)
+        if(!this.cache) {
+            this.cache = (await db.query(`select * from "picture"`)).rows;
+        }
+        res.json(this.cache)
     }
 
     /**************************************************************

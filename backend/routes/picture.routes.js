@@ -15,12 +15,14 @@ router.post('/picture', body("tag_id").isInt(), body('url').isURL({protocols: ['
 /**************************************************************
  * Запросы на получение
  **************************************************************/
-router.get('/picture', pictureController.getAllPictures)
+router.get('/picture', pictureController.getAllPictures.bind(pictureController))
+/*
 router.get('/picture/:id', param('id').isInt(),
     (req,res) => validateMethod(req,res, pictureController.getPictureById))
 
 router.get('/picture/tag_id/:tag_id', param('tag_id').isInt(),
     (req,res) => validateMethod(req,res, pictureController.getPictureByTagId))
+*/
 
 /**************************************************************
  * Запросы на обновление
