@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react';
+import { QrReader } from 'react-qr-reader';
 import AlbumItems from '../components/AlbumItems';
 
 import {
@@ -18,6 +19,8 @@ import {Icon28Search} from '@vkontakte/icons';
 import {ROUTES} from '../routes';
 
 const SearchEvents = (props) => {
+    const [showScanner, setShowScanner] = useState(false);
+
     useEffect(async () => {
         async function fetchData() {
             props.setPreviousPage(ROUTES.SEARCH_EVENTS)
@@ -25,6 +28,25 @@ const SearchEvents = (props) => {
 
         await fetchData();
     }, []);
+
+const handleScan = async (data) => {
+    if (data) {
+        setShowScanner(false);
+
+        const scannedEvent = props.events.find(event => event.id === parseInt(data));
+        if (scannedEvent) {
+            await props.setCurrentEvent(scannedEvent); 
+            props.setActiveStory(ROUTES.EVENT_PAGE);
+        } else {
+            alert('Невалидный QR-код.');
+        }
+    }
+};
+
+const handleError = (err) => {
+    console.error(err);
+};
+
     return (
         <View activePanel="horizontalCell">
             <Panel id="horizontalCell">
@@ -42,6 +64,18 @@ const SearchEvents = (props) => {
                         </Button>
 
                         <Spacing size={10}/>
+
+                        <Button
+                            before={<Icon28QrCodeOutline />}
+                            stretched
+                            mode="secondary"
+                            onClick={() => setShowScanner(true)}
+                        >
+                            QR-код
+                        </Button>
+
+                        <Spacing size={10} />
+
                         <Separator wide/>
 
                     </FixedLayout>
@@ -62,6 +96,24 @@ const SearchEvents = (props) => {
                                 {`Доступных событий больше не осталось :(`}
                             </Text>}
                     </CardGrid>
+
+                    {showScanner && (
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <QrReader
+                                delay={300}
+                                onError={handleError}
+                                onScan={handleScan}
+                                style={{ width: '100%' }}
+                            />
+                            <Button
+                                onClick={() => setShowScanner(false)}
+                                mode="secondary"
+                                style={{ marginTop: '10px' }}
+                            >
+                                Отмена
+                            </Button>
+                        </div>
+                    )}
 
                 </Group>
             </Panel>

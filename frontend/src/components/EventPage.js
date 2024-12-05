@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import {
     Button,
     ContentCard,
@@ -97,6 +98,19 @@ const EventPage = ({event, fetchedUser, openDeletion, previousPage, setActiveSto
                         <TagButtons tags={tags}/>
                     </div>
 
+                    {props.event.chat_link &&
+                        <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                        <h3>QR-код чата</h3>
+                        <QRCodeSVG 
+                            value={props.event.chat_link.toString()}
+                            size={256}
+                            bgColor="#ffffff"
+                            fgColor="#000000"
+                            level="H"
+                            includeMargin={true}
+                        />
+                    </div>
+                    }
 
                 </Group>
 
